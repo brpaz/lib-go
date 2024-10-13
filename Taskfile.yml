@@ -1,0 +1,38 @@
+# Taskfile is used to run common tasks when developing the application.
+# Check : https://taskfile.dev/usage/
+version: "3"
+
+tasks:
+  default:
+    cmds:
+      - task -l
+
+  # ==================================================
+  # Linting and Tests
+  # ==================================================
+  lint:
+    desc: Lints Go code using golangci-lint
+    cmds:
+      - golangci-lint run --fix
+
+  fmt:
+    desc: Formats all code
+    cmds:
+      - gofumpt -l -w .
+
+  gomarkdoc:
+    desc: Generates documentation from Go comments
+    cmds:
+      - gomarkdoc --output "{{ print `{{.Dir}}/README.md` }}" ./...
+
+  test:
+    desc: Runs application tests
+    summary: Executes all package level tests (unit and integration)
+    cmds:
+      - mkdir -p {{.REPORTS_DIR}}
+      - gotestsum --format="testname" --junitfile {{.REPORTS_DIR}}/unit-tests.xml --jsonfile {{.REPORTS_DIR}}/unit-tests.json -- -coverprofile={{.REPORTS_DIR}}/cover.out -covermode=atomic ./...
+
+  test-cover-report:
+    desc: Opens the test coverage report in the browser
+    cmds:
+      - go tool cover -html=reports/cover.out
