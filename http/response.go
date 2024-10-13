@@ -11,7 +11,6 @@ func Ok(w http.ResponseWriter, body any) {
 
 	// Write the response body
 	err := json.NewEncoder(w).Encode(body)
-
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
