@@ -11,16 +11,18 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/brpaz/lib-go/storage/db/migrator"
-	dbtest "github.com/brpaz/lib-go/storage/db/testutil"
+	dbtestutil "github.com/brpaz/lib-go/storage/db/testutil"
 )
 
-var dbInstance *dbtest.TestPgContainer
+var dbInstance *dbtestutil.TestPgContainer
 
-func setupTestDb(ctx context.Context) (*dbtest.TestPgContainer, error) {
-	return dbtest.InitPgTestContainer(ctx)
+func setupTestDb(ctx context.Context) (*dbtestutil.TestPgContainer, error) {
+	return dbtestutil.InitPgTestContainer(ctx)
 }
 
-func setupMigrator(dbConn *sql.DB) (*migrator.GooseMigrator, error) {
+func setupMigrator(t *testing.T, dbConn *sql.DB) (*migrator.GooseMigrator, error) {
+	t.Helper()
+
 	return migrator.NewGooseMigrator(
 		migrator.WithGooseDB(dbConn),
 		migrator.WithGooseAllowOutOfOrder(true),
@@ -46,18 +48,16 @@ func tableExists(dbConn *sql.DB, tableName string) bool {
 
 func TestNewGooseMigrator(t *testing.T) {
 	dbConn, err := dbInstance.GetConnection(context.Background())
-	if err != nil {
-		t.Fatalf("Failed to get connection to test database: %v", err)
-	}
+	require.NoError(t, err)
 
 	t.Run("WithMissingDB_ReturnsError", func(t *testing.T) {
 		_, err := migrator.NewGooseMigrator()
 		require.Error(t, err)
-		assert.IsType(t, err, migrator.ErrDBNotSet)
+		assert.IsType(t, err, migrator.ErrMissingSqlDB)
 	})
 
 	t.Run("WithValidOptions_ReturnsMigrator", func(t *testing.T) {
-		m, err := setupMigrator(dbConn)
+		m, err := setupMigrator(t, dbConn)
 		require.NoError(t, err)
 		assert.IsType(t, m, &migrator.GooseMigrator{})
 	})
@@ -75,11 +75,9 @@ func TestNewGooseMigrator(t *testing.T) {
 func TestGooseMigrator_Up(t *testing.T) {
 	ctx := context.Background()
 	dbConn, err := dbInstance.GetConnection(ctx)
-	if err != nil {
-		t.Fatalf("Failed to get connection to test database: %v", err)
-	}
+	require.NoError(t, err)
 
-	m, err := setupMigrator(dbConn)
+	m, err := setupMigrator(t, dbConn)
 	require.NoError(t, err)
 
 	err = m.Up(ctx)
@@ -93,11 +91,9 @@ func TestGooseMigrator_Up(t *testing.T) {
 func TestGooseMigrator_Down(t *testing.T) {
 	ctx := context.Background()
 	dbConn, err := dbInstance.GetConnection(ctx)
-	if err != nil {
-		t.Fatalf("Failed to get connection to test database: %v", err)
-	}
+	require.NoError(t, err)
 
-	m, err := setupMigrator(dbConn)
+	m, err := setupMigrator(t, dbConn)
 	require.NoError(t, err)
 
 	err = m.Up(ctx)
@@ -112,11 +108,9 @@ func TestGooseMigrator_Down(t *testing.T) {
 func TestGooseMigrator_Reset(t *testing.T) {
 	ctx := context.Background()
 	dbConn, err := dbInstance.GetConnection(ctx)
-	if err != nil {
-		t.Fatalf("Failed to get connection to test database: %v", err)
-	}
+	require.NoError(t, err)
 
-	m, err := setupMigrator(dbConn)
+	m, err := setupMigrator(t, dbConn)
 	require.NoError(t, err)
 
 	err = m.Up(ctx)
@@ -131,9 +125,7 @@ func TestGooseMigrator_Reset(t *testing.T) {
 func TestGooseMigrator_Create(t *testing.T) {
 	ctx := context.Background()
 	dbConn, err := dbInstance.GetConnection(ctx)
-	if err != nil {
-		t.Fatalf("Failed to get connection to test database: %v", err)
-	}
+	require.NoError(t, err)
 
 	migrationsDir, err := os.MkdirTemp("", "migrations")
 	require.NoError(t, err)

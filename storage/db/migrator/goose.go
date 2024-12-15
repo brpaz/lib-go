@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	ErrDBNotSet              = errors.New("a sql.DB connection is required")
-	ErrMigrationsNotSet      = errors.New("migrations directory or filesystem is required")
+	ErrMissingSqlDB          = errors.New("a sql.DB connection is required")
+	ErrMissingMigrationsDir  = errors.New("migrations directory or filesystem is required")
 	ErrInvalidMigrationsType = errors.New("invalid migrations type. must be either 'go' or 'sql'")
 )
 
@@ -46,11 +46,11 @@ type GooseMigrator struct {
 
 func (m *GooseMigrator) Validate() error {
 	if m.DB == nil {
-		return ErrDBNotSet
+		return ErrMissingSqlDB
 	}
 
 	if m.MigrationsDir == "" {
-		return ErrMigrationsNotSet
+		return ErrMissingMigrationsDir
 	}
 
 	if m.MigrationsType != MigrationTypeGo && m.MigrationsType != MigrationTypeSQL {

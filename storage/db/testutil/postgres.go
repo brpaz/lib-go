@@ -38,23 +38,32 @@ func (c *TestPgContainer) GetDSN(ctx context.Context) (string, error) {
 // GetConnection returns an active database connection to the PostgreSQL container.
 // It ensures that the connection is established only once, even if called concurrently.
 func (c *TestPgContainer) GetConnection(ctx context.Context) (*sql.DB, error) {
-	var err error
-	var conn *sql.DB
+	var onceErr error
 
+	// Ensure initialization occurs only once
 	c.connOnce.Do(func() {
 		var connStr string
-		connStr, err = c.GetDSN(ctx)
-		if err != nil {
+		var conn *sql.DB
+		connStr, onceErr = c.GetDSN(ctx)
+		if onceErr != nil {
 			return
 		}
 
-		conn, err = sql.Open("postgres", connStr)
+		conn, onceErr = sql.Open("postgres", connStr)
+		if onceErr != nil {
+			return
+		}
+
+		c.conn = conn
 	})
 
-	if err != nil {
-		return nil, fmt.Errorf("failed to get or open database connection: %w", err)
+	// If initialization failed, return the error
+	if onceErr != nil {
+		return nil, fmt.Errorf("failed to get or open database connection: %w", onceErr)
 	}
-	return conn, nil
+
+	// Return the already initialized connection
+	return c.conn, nil
 }
 
 // Stop terminates the PostgreSQL container and closes the connection if it's open.

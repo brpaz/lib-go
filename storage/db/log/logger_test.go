@@ -14,7 +14,7 @@ import (
 
 	"github.com/brpaz/lib-go/log"
 	dblog "github.com/brpaz/lib-go/storage/db/log"
-	dbtest "github.com/brpaz/lib-go/storage/db/testutil"
+	dbtestutil "github.com/brpaz/lib-go/storage/db/testutil"
 )
 
 func TestNewGormLogger(t *testing.T) {
@@ -230,7 +230,7 @@ func TestTrace(t *testing.T) {
 
 func TestTrace_Integration(t *testing.T) {
 	ctx := context.Background()
-	dbContainer, iniErr := dbtest.InitPgTestContainer(ctx)
+	dbContainer, iniErr := dbtestutil.InitPgTestContainer(ctx)
 	require.NoError(t, iniErr)
 
 	defer func() {

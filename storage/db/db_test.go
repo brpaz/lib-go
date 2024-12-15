@@ -5,13 +5,13 @@ import (
 	"os"
 	"testing"
 
-	dbtest "github.com/brpaz/lib-go/storage/db/testutil"
+	dbtestutil "github.com/brpaz/lib-go/storage/db/testutil"
 )
 
-var dbInstance *dbtest.TestPgContainer
+var dbInstance *dbtestutil.TestPgContainer
 
-func setupTestDb(ctx context.Context) (*dbtest.TestPgContainer, error) {
-	return dbtest.InitPgTestContainer(ctx)
+func setupTestDb(ctx context.Context) (*dbtestutil.TestPgContainer, error) {
+	return dbtestutil.InitPgTestContainer(ctx)
 }
 
 // TestMain is the entry point for running tests in this package.
