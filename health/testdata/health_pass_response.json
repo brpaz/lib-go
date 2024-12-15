@@ -1,0 +1,16 @@
+{
+  "service": "test-service",
+  "description": "Test Service",
+  "version": "1.0.0",
+  "commit": "abc123",
+  "status": "pass",
+  "checks": {
+    "check:1": {
+      "status": "pass"
+    },
+    "check:2": {
+      "status": "pass"
+    }
+  },
+  "timestamp": 1717679110
+}

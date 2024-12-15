@@ -2,6 +2,8 @@
 # Check : https://taskfile.dev/usage/
 version: "3"
 
+vars:
+  REPORTS_DIR: reports
 tasks:
   default:
     cmds:

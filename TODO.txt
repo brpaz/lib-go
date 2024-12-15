@@ -1,0 +1,6 @@
+# TODO
+
+- Tracing
+- Error Handling
+- Validator
+

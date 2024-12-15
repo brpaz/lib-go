@@ -1,4 +1,4 @@
-package http_test
+package httputil_test
 
 import (
 	"encoding/json"
@@ -8,10 +8,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	libhttp "github.com/brpaz/lib-go/http"
+	"github.com/brpaz/lib-go/httputil"
 )
 
-func TestOk(t *testing.T) {
+func TestJSON(t *testing.T) {
 	t.Parallel()
 
 	t.Run("success", func(t *testing.T) {
@@ -21,7 +21,7 @@ func TestOk(t *testing.T) {
 
 		body := map[string]string{"message": "success"}
 
-		libhttp.Ok(rr, body)
+		httputil.JSON(rr, http.StatusOK, body)
 
 		assert.Equal(t, http.StatusOK, rr.Code)
 
@@ -36,18 +36,9 @@ func TestOk(t *testing.T) {
 		rr := httptest.NewRecorder()
 		body := make(chan int)
 
-		libhttp.Ok(rr, body)
+		httputil.JSON(rr, http.StatusAccepted, body)
 
 		assert.Equal(t, http.StatusInternalServerError, rr.Code)
 		assert.Contains(t, rr.Body.String(), "json: unsupported type")
 	})
-}
-
-func TestNoContent(t *testing.T) {
-	rr := httptest.NewRecorder()
-
-	libhttp.NoContent(rr)
-
-	assert.Equal(t, http.StatusNoContent, rr.Code)
-	assert.Equal(t, 0, rr.Body.Len())
 }

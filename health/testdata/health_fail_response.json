@@ -1,0 +1,14 @@
+{
+  "service": "test-service",
+  "description": "Test Service",
+  "version": "1.0.0",
+  "commit": "abc123",
+  "status": "fail",
+  "checks": {
+    "check:1": {
+      "status": "fail",
+      "message": "Stub check failed"
+    }
+  },
+  "timestamp": 1717679110
+}
