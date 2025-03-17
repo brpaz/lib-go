@@ -62,7 +62,7 @@ jobs:
           gotestsum --junitfile reports/unit-tests.xml --jsonfile reports/unit-tests-results.json -- -race -covermode=atomic -coverprofile=cover.txt ./...
 
       - name: Generate test report
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v2
         if: ${{ !cancelled() }}
         with:
             name: Unit Tests Report
