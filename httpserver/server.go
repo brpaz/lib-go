@@ -19,7 +19,7 @@ const (
 
 // Server wraps net/http.Server with lifecycle helpers.
 type Server struct {
-	httpServer      *http.Server
+	srv             *http.Server
 	shutdownTimeout time.Duration
 }
 
@@ -121,7 +121,7 @@ func New(opts ...Option) (*Server, error) {
 	s := &Server{
 		shutdownTimeout: o.shutdownTimeout,
 	}
-	s.httpServer = &http.Server{
+	s.srv = &http.Server{
 		Addr:              fmt.Sprintf(":%d", o.port),
 		Handler:           o.handler,
 		ReadTimeout:       o.readTimeout,
@@ -135,17 +135,17 @@ func New(opts ...Option) (*Server, error) {
 
 // Addr returns the server's listen address.
 func (s *Server) Addr() string {
-	return s.httpServer.Addr
+	return s.srv.Addr
 }
 
 // Start begins serving HTTP requests. Blocks until the server stops.
 func (s *Server) Start() error {
-	return s.httpServer.ListenAndServe()
+	return s.srv.ListenAndServe()
 }
 
 // Shutdown gracefully drains active connections.
 func (s *Server) Shutdown(ctx context.Context) error {
-	return s.httpServer.Shutdown(ctx)
+	return s.srv.Shutdown(ctx)
 }
 
 // Run starts the server and blocks until ctx is cancelled, then performs a
