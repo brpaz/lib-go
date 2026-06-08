@@ -1,0 +1,88 @@
+name: CI
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+  release:
+    types:
+      - published
+
+env:
+  GOTESTSUM_VERSION: 1.12.0
+  GOLANGCI_LINT_VERSION: v2.12.2
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+  packages: write
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: "go.mod"
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v9.2.1
+        with:
+          version: ${{ env.GOLANGCI_LINT_VERSION }}
+          only-new-issues: true
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: "go.mod"
+
+      - name: Setup gotestsum
+        uses: autero1/action-gotestsum@v2.0.0
+        with:
+          gotestsum_version: ${{ env.GOTESTSUM_VERSION }}
+
+      - name: Run tests
+        run: |
+          gotestsum --junitfile reports/unit-tests.xml --jsonfile reports/unit-tests-results.json -- -race -covermode=atomic -coverprofile=cover.txt ./...
+
+      - name: Generate test report
+        uses: dorny/test-reporter@v3
+        if: ${{ always() }}
+        with:
+          name: Unit Tests Report
+          path: "reports/unit-tests-results.json"
+          reporter: golang-json
+
+      - name: Upload test report artifact
+        uses: actions/upload-artifact@v8
+        if: ${{ always() }}
+        with:
+          name: unit-test-report
+          path: reports
+
+      - name: Upload code coverage report to Codecov
+        if: ${{ always() }}
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: cover.txt
+
+      - name: Upload test results to Codecov
+        if: ${{ cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./reports/unit-tests.xml

@@ -1,0 +1,59 @@
+# Golang CI configuration file
+# Check https://golangci-lint.run/docs/configuration/file/
+version: "2"
+
+run:
+  timeout: 5m
+
+linters:
+  default: standard
+  enable:
+    - sloglint
+    - gosec
+    - gocritic
+    - bodyclose
+    - noctx
+    - errorlint
+    - nilerr
+    - misspell
+    - nolintlint
+    - unconvert
+    - unparam
+    - wastedassign
+    - goconst
+  settings:
+    gocyclo:
+      min-complexity: 10
+
+  exclusions:
+    paths-except:
+      - .devenv
+
+formatters:
+  enable:
+    - gofumpt
+    - gci
+    - golines
+  settings:
+    golines:
+      max-len: 100
+    gci:
+      sections:
+        - standard
+        - default
+        - blank
+        - prefix(github.com/brpaz/lib-go)
+        - blank
+        - dot
+        - alias
+        - localmodule
+
+output:
+  formats:
+    text:
+      path: stdout
+      colors: true
+    html:
+      path: ./reports/golangci-lint/html/index.html
+    junit-xml:
+      path: ./reports/golangci-lint/junit.xml

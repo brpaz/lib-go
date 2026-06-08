@@ -1,0 +1,39 @@
+- name: breaking
+  color: "d73a4a"
+  description: "Changes that break backward compatibility"
+
+- name: feature
+  color: "a2eeef"
+  description: "New features or improvements"
+
+- name: enhancement
+  color: "84b6eb"
+  description: "Enhancements to existing features"
+
+- name: bug
+  color: "d73a4a"
+  description: "Bug fixes"
+
+- name: fix
+  color: "e99695"
+  description: "Pull request for bug fixes"
+
+- name: security
+  color: "ee0701"
+  description: "Security-related updates"
+
+- name: performance
+  color: "d4c5f9"
+  description: "Performance improvements or issues"
+
+- name: maintenance
+  color: "fef2c0"
+  description: "General upkeep and refactoring"
+
+- name: docs
+  color: "0075ca"
+  description: "Documentation improvements"
+
+- name: dependencies
+  color: "0366d6"
+  description: "Dependency updates"
