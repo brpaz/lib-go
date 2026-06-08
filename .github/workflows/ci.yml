@@ -67,7 +67,7 @@ jobs:
           reporter: golang-json
 
       - name: Upload test report artifact
-        uses: actions/upload-artifact@v8
+        uses: actions/upload-artifact@v7
         if: ${{ always() }}
         with:
           name: unit-test-report
