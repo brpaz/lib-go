@@ -133,7 +133,7 @@ nullable.Equal(nullable.Of(5), nullable.Empty[int]())  // false
 
 
 <a name="Equal"></a>
-## func [Equal](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L268>)
+## func Equal
 
 ```go
 func Equal[T comparable](a, b Value[T]) bool
@@ -142,7 +142,7 @@ func Equal[T comparable](a, b Value[T]) bool
 Equal reports whether a and b represent the same optional value. Two invalid Values are equal; a valid and an invalid are not; two valid Values are equal when their underlying values are equal.
 
 <a name="Value"></a>
-## type [Value](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L15-L18>)
+## type Value
 
 Value holds an optional value of type T.
 
@@ -154,7 +154,7 @@ type Value[T any] struct {
 ```
 
 <a name="Empty"></a>
-### func [Empty](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L26>)
+### func Empty
 
 ```go
 func Empty[T any]() Value[T]
@@ -163,7 +163,7 @@ func Empty[T any]() Value[T]
 Empty returns an invalid \(null\) Value of type T.
 
 <a name="FromPtr"></a>
-### func [FromPtr](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L34>)
+### func FromPtr
 
 ```go
 func FromPtr[T any](p *T) Value[T]
@@ -172,7 +172,7 @@ func FromPtr[T any](p *T) Value[T]
 FromPtr converts a pointer to a Value. A nil pointer becomes an invalid \(null\) Value; a non\-nil pointer becomes valid, wrapping a copy of the pointed\-to value. Useful at boundaries with pointer\-based APIs \(generated DTOs, ORMs\) that represent optional fields as \*T.
 
 <a name="Of"></a>
-### func [Of](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L21>)
+### func Of
 
 ```go
 func Of[T any](v T) Value[T]
@@ -181,7 +181,7 @@ func Of[T any](v T) Value[T]
 Of returns a valid Value wrapping v.
 
 <a name="Value[T].Clear"></a>
-### func \(\*Value\[T\]\) [Clear](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L91>)
+### func \(\*Value\[T\]\) Clear
 
 ```go
 func (n *Value[T]) Clear()
@@ -190,7 +190,7 @@ func (n *Value[T]) Clear()
 Clear marks the Value as invalid/null.
 
 <a name="Value[T].Get"></a>
-### func \(Value\[T\]\) [Get](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L43>)
+### func \(Value\[T\]\) Get
 
 ```go
 func (n Value[T]) Get() (T, bool)
@@ -199,7 +199,7 @@ func (n Value[T]) Get() (T, bool)
 Get returns \(value, true\) if valid, or \(zero, false\) if not.
 
 <a name="Value[T].IsNull"></a>
-### func \(Value\[T\]\) [IsNull](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L70>)
+### func \(Value\[T\]\) IsNull
 
 ```go
 func (n Value[T]) IsNull() bool
@@ -208,7 +208,7 @@ func (n Value[T]) IsNull() bool
 IsNull returns true if the value is not valid.
 
 <a name="Value[T].MarshalJSON"></a>
-### func \(Value\[T\]\) [MarshalJSON](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L98>)
+### func \(Value\[T\]\) MarshalJSON
 
 ```go
 func (n Value[T]) MarshalJSON() ([]byte, error)
@@ -217,7 +217,7 @@ func (n Value[T]) MarshalJSON() ([]byte, error)
 MarshalJSON marshals to the JSON value if valid, or null if not.
 
 <a name="Value[T].MarshalText"></a>
-### func \(Value\[T\]\) [MarshalText](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L127>)
+### func \(Value\[T\]\) MarshalText
 
 ```go
 func (n Value[T]) MarshalText() ([]byte, error)
@@ -226,7 +226,7 @@ func (n Value[T]) MarshalText() ([]byte, error)
 MarshalText implements encoding.TextMarshaler. It returns an empty byte slice when invalid, or the textual representation of Val when valid — the form expected by JSON map keys, url.Values and form/query encoders. T must be a string, a basic numeric/bool kind, or implement [encoding.TextMarshaler](<https://pkg.go.dev/encoding/#TextMarshaler>); any other type returns an error.
 
 <a name="Value[T].Scan"></a>
-### func \(\*Value\[T\]\) [Scan](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L220>)
+### func \(\*Value\[T\]\) Scan
 
 ```go
 func (n *Value[T]) Scan(src any) error
@@ -235,7 +235,7 @@ func (n *Value[T]) Scan(src any) error
 Scan implements sql.Scanner, allowing Value to be used as a scan destination. A nil src sets Valid=false; otherwise it delegates to sql.Scanner if T implements it, or falls back to reflect\-based assignment, and sets Valid=true on success.
 
 <a name="Value[T].Set"></a>
-### func \(\*Value\[T\]\) [Set](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L85>)
+### func \(\*Value\[T\]\) Set
 
 ```go
 func (n *Value[T]) Set(v T)
@@ -244,7 +244,7 @@ func (n *Value[T]) Set(v T)
 Set sets the value and marks it valid.
 
 <a name="Value[T].String"></a>
-### func \(Value\[T\]\) [String](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L76>)
+### func \(Value\[T\]\) String
 
 ```go
 func (n Value[T]) String() string
@@ -253,7 +253,7 @@ func (n Value[T]) String() string
 String implements fmt.Stringer, returning a textual representation of Val when valid, or "\<null\>" when not — useful for logging and debugging.
 
 <a name="Value[T].ToPtr"></a>
-### func \(Value\[T\]\) [ToPtr](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L59>)
+### func \(Value\[T\]\) ToPtr
 
 ```go
 func (n Value[T]) ToPtr() *T
@@ -262,7 +262,7 @@ func (n Value[T]) ToPtr() *T
 ToPtr converts n to a pointer. An invalid Value becomes nil; a valid Value becomes a pointer to a copy of Val. Pairs with [FromPtr](<#FromPtr>) for round\-tripping through pointer\-based APIs.
 
 <a name="Value[T].UnmarshalJSON"></a>
-### func \(\*Value\[T\]\) [UnmarshalJSON](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L107>)
+### func \(\*Value\[T\]\) UnmarshalJSON
 
 ```go
 func (n *Value[T]) UnmarshalJSON(data []byte) error
@@ -271,7 +271,7 @@ func (n *Value[T]) UnmarshalJSON(data []byte) error
 UnmarshalJSON parses JSON null as invalid, otherwise unmarshals into Val and sets Valid=true.
 
 <a name="Value[T].UnmarshalText"></a>
-### func \(\*Value\[T\]\) [UnmarshalText](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L158>)
+### func \(\*Value\[T\]\) UnmarshalText
 
 ```go
 func (n *Value[T]) UnmarshalText(text []byte) error
@@ -280,7 +280,7 @@ func (n *Value[T]) UnmarshalText(text []byte) error
 UnmarshalText implements encoding.TextUnmarshaler. Empty input marks the Value as invalid \(null\); otherwise it parses the text into T. T must be a string, a basic numeric/bool kind, or \*T must implement [encoding.TextUnmarshaler](<https://pkg.go.dev/encoding/#TextUnmarshaler>); any other type returns an error.
 
 <a name="Value[T].Value"></a>
-### func \(Value\[T\]\) [Value](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L253>)
+### func \(Value\[T\]\) Value
 
 ```go
 func (n Value[T]) Value() (driver.Value, error)
@@ -289,7 +289,7 @@ func (n Value[T]) Value() (driver.Value, error)
 Value implements driver.Valuer, returning nil if not valid, or the underlying value if valid.
 
 <a name="Value[T].ValueOr"></a>
-### func \(Value\[T\]\) [ValueOr](<https://github.com/brpaz/lib-go/blob/main/nullable/nullable.go#L48>)
+### func \(Value\[T\]\) ValueOr
 
 ```go
 func (n Value[T]) ValueOr(fallback T) T

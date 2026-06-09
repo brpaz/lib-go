@@ -1,6 +1,10 @@
 package logging
 
-import "context"
+import (
+	"context"
+
+	"go.opentelemetry.io/otel/trace"
+)
 
 // contextKey is the unexported key used to store a Logger in a context.
 type contextKey struct{}
@@ -17,4 +21,13 @@ func FromContext(ctx context.Context) *Logger {
 		return l
 	}
 	return newNoop()
+}
+
+// TraceIDFromContext returns the OTEL trace ID from the active span in ctx.
+// Returns an empty string when no active span is present.
+func TraceIDFromContext(ctx context.Context) string {
+	if span := trace.SpanFromContext(ctx); span.IsRecording() {
+		return span.SpanContext().TraceID().String()
+	}
+	return ""
 }

@@ -67,7 +67,7 @@ ptr.Equal(ptr.Of("foo"), nil)           // false — one nil
 
 
 <a name="Deref"></a>
-## func [Deref](<https://github.com/brpaz/lib-go/blob/main/ptr/ptr.go#L19>)
+## func Deref
 
 ```go
 func Deref[T any](p *T) T
@@ -76,7 +76,7 @@ func Deref[T any](p *T) T
 Deref dereferences p and returns the value, or the zero value of T if p is nil.
 
 <a name="Equal"></a>
-## func [Equal](<https://github.com/brpaz/lib-go/blob/main/ptr/ptr.go#L37>)
+## func Equal
 
 ```go
 func Equal[T comparable](a, b *T) bool
@@ -85,7 +85,7 @@ func Equal[T comparable](a, b *T) bool
 Equal reports whether two pointers are equal. Both nil pointers are considered equal. Two non\-nil pointers are equal when the values they point to are equal.
 
 <a name="IsNil"></a>
-## func [IsNil](<https://github.com/brpaz/lib-go/blob/main/ptr/ptr.go#L30>)
+## func IsNil
 
 ```go
 func IsNil[T any](p *T) bool
@@ -94,7 +94,7 @@ func IsNil[T any](p *T) bool
 IsNil returns true if p is nil.
 
 <a name="Of"></a>
-## func [Of](<https://github.com/brpaz/lib-go/blob/main/ptr/ptr.go#L4>)
+## func Of
 
 ```go
 func Of[T any](v T) *T
@@ -103,7 +103,7 @@ func Of[T any](v T) *T
 Of returns a pointer to the given value.
 
 <a name="ValueOf"></a>
-## func [ValueOf](<https://github.com/brpaz/lib-go/blob/main/ptr/ptr.go#L10>)
+## func ValueOf
 
 ```go
 func ValueOf[T any](p *T, fallback T) T

@@ -5,21 +5,21 @@ import (
 	"sync"
 )
 
-// Fake records every sent message instead of delivering it. Use it in tests
+// InMemory records every sent message instead of delivering it. Use it in tests
 // to assert which emails a service sent, without wiring a real transport.
 // Safe for concurrent use.
-type Fake struct {
+type InMemory struct {
 	mu   sync.Mutex
 	sent []Message
 }
 
-// NewFake creates an empty Fake mailer.
-func NewFake() *Fake {
-	return &Fake{}
+// NewInMemory creates an empty InMemory mailer.
+func NewInMemory() *InMemory {
+	return &InMemory{}
 }
 
 // Send records msg and returns nil.
-func (m *Fake) Send(_ context.Context, msg Message) error {
+func (m *InMemory) Send(_ context.Context, msg Message) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -29,7 +29,7 @@ func (m *Fake) Send(_ context.Context, msg Message) error {
 }
 
 // Sent returns a copy of every message recorded so far, in send order.
-func (m *Fake) Sent() []Message {
+func (m *InMemory) Sent() []Message {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 

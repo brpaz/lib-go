@@ -1,7 +1,11 @@
 # TODO
 
-- migrator
 - otel ??
-- validator ??
-- ratelimiter
-- database utils
+- ratelimiter (go-rate-limiter)
+- database utils (transactional outbox pattern, audit log, migrator) -> go-db-utils
+
+## Other
+
+- Circuit Breaker - https://github.com/schigh/circuit
+
+## Merge app

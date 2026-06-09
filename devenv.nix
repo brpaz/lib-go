@@ -7,9 +7,12 @@
   packages = with pkgs; [
     go-task
     lefthook
-    (gomarkdoc.overrideAttrs (_: { doCheck = false; }))
+    (gomarkdoc.overrideAttrs (_: {
+      doCheck = false;
+    }))
     golangci-lint
     commitlint-rs
+    gotestsum
   ];
 
   languages = {

@@ -86,7 +86,7 @@ How sort parameters are encoded on the wire \(repeated query params, a comma\-se
 
 
 <a name="Direction"></a>
-## type [Direction](<https://github.com/brpaz/lib-go/blob/main/sorting/sorting.go#L10>)
+## type Direction
 
 Direction is a sort direction: ASC or DESC.
 
@@ -104,7 +104,7 @@ const (
 ```
 
 <a name="ParseDirection"></a>
-### func [ParseDirection](<https://github.com/brpaz/lib-go/blob/main/sorting/sorting.go#L18>)
+### func ParseDirection
 
 ```go
 func ParseDirection(s string) (Direction, error)
@@ -113,7 +113,7 @@ func ParseDirection(s string) (Direction, error)
 ParseDirection parses a case\-insensitive string into a Direction.
 
 <a name="Sort"></a>
-## type [Sort](<https://github.com/brpaz/lib-go/blob/main/sorting/sorting.go#L30-L33>)
+## type Sort
 
 Sort holds a validated field and direction for ORDER BY clauses.
 
@@ -125,7 +125,7 @@ type Sort struct {
 ```
 
 <a name="Default"></a>
-### func [Default](<https://github.com/brpaz/lib-go/blob/main/sorting/sorting.go#L52>)
+### func Default
 
 ```go
 func Default(s Sort, defaultField string, defaultDir Direction) Sort
@@ -134,7 +134,7 @@ func Default(s Sort, defaultField string, defaultDir Direction) Sort
 Default returns s if its Field is non\-empty, otherwise a Sort with defaultField and defaultDir.
 
 <a name="NewSort"></a>
-### func [NewSort](<https://github.com/brpaz/lib-go/blob/main/sorting/sorting.go#L38>)
+### func NewSort
 
 ```go
 func NewSort(field, dir string, allowed []string) (Sort, error)
@@ -143,7 +143,7 @@ func NewSort(field, dir string, allowed []string) (Sort, error)
 NewSort creates a Sort after validating field against allowed and parsing dir. Returns an error if field is not in the allow\-list or dir is not ASC/DESC. The allow\-list prevents SQL injection when field names come from user input.
 
 <a name="Sort.SQL"></a>
-### func \(Sort\) [SQL](<https://github.com/brpaz/lib-go/blob/main/sorting/sorting.go#L61>)
+### func \(Sort\) SQL
 
 ```go
 func (s Sort) SQL() string
@@ -152,7 +152,7 @@ func (s Sort) SQL() string
 SQL returns the ORDER BY fragment \(e.g. "created\_at DESC"\) safe for direct use in queries. Both Field and Dir are validated at construction, so this output is injection\-safe.
 
 <a name="Sorts"></a>
-## type [Sorts](<https://github.com/brpaz/lib-go/blob/main/sorting/sorting.go#L66>)
+## type Sorts
 
 Sorts is an ordered list of validated Sort clauses for multi\-column ORDER BY.
 
@@ -161,7 +161,7 @@ type Sorts []Sort
 ```
 
 <a name="Sorts.SQL"></a>
-### func \(Sorts\) [SQL](<https://github.com/brpaz/lib-go/blob/main/sorting/sorting.go#L71>)
+### func \(Sorts\) SQL
 
 ```go
 func (s Sorts) SQL() string

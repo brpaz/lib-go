@@ -39,10 +39,10 @@ Pass [Noop](<#Noop>) when a component needs a [Mailer](<#Mailer>) but the test d
 svc := NewSignupService(mailer.Noop{})
 ```
 
-Pass [Fake](<#Fake>) to assert which messages a service sent, without wiring a real transport:
+Pass [InMemory](<#InMemory>) to assert which messages a service sent, without wiring a real transport:
 
 ```
-m   := mailer.NewFake()
+m   := mailer.NewInMemory()
 svc := NewSignupService(m)
 
 _ = svc.Register(ctx, user)
@@ -58,10 +58,10 @@ Code should depend on the [Mailer](<#Mailer>) interface rather than a concrete t
 ## Index
 
 - [Variables](<#variables>)
-- [type Fake](<#Fake>)
-  - [func NewFake\(\) \*Fake](<#NewFake>)
-  - [func \(m \*Fake\) Send\(\_ context.Context, msg Message\) error](<#Fake.Send>)
-  - [func \(m \*Fake\) Sent\(\) \[\]Message](<#Fake.Sent>)
+- [type InMemory](<#InMemory>)
+  - [func NewInMemory\(\) \*InMemory](<#NewInMemory>)
+  - [func \(m \*InMemory\) Send\(\_ context.Context, msg Message\) error](<#InMemory.Send>)
+  - [func \(m \*InMemory\) Sent\(\) \[\]Message](<#InMemory.Sent>)
 - [type Mailer](<#Mailer>)
 - [type Message](<#Message>)
 - [type Noop](<#Noop>)
@@ -80,46 +80,46 @@ Code should depend on the [Mailer](<#Mailer>) interface rather than a concrete t
 var ErrNoRecipients = errors.New("mailer: message has no recipients")
 ```
 
-<a name="Fake"></a>
-## type [Fake](<https://github.com/brpaz/lib-go/blob/main/mailer/fake.go#L11-L14>)
+<a name="InMemory"></a>
+## type InMemory
 
-Fake records every sent message instead of delivering it. Use it in tests to assert which emails a service sent, without wiring a real transport. Safe for concurrent use.
+InMemory records every sent message instead of delivering it. Use it in tests to assert which emails a service sent, without wiring a real transport. Safe for concurrent use.
 
 ```go
-type Fake struct {
+type InMemory struct {
     // contains filtered or unexported fields
 }
 ```
 
-<a name="NewFake"></a>
-### func [NewFake](<https://github.com/brpaz/lib-go/blob/main/mailer/fake.go#L17>)
+<a name="NewInMemory"></a>
+### func NewInMemory
 
 ```go
-func NewFake() *Fake
+func NewInMemory() *InMemory
 ```
 
-NewFake creates an empty Fake mailer.
+NewInMemory creates an empty InMemory mailer.
 
-<a name="Fake.Send"></a>
-### func \(\*Fake\) [Send](<https://github.com/brpaz/lib-go/blob/main/mailer/fake.go#L22>)
+<a name="InMemory.Send"></a>
+### func \(\*InMemory\) Send
 
 ```go
-func (m *Fake) Send(_ context.Context, msg Message) error
+func (m *InMemory) Send(_ context.Context, msg Message) error
 ```
 
 Send records msg and returns nil.
 
-<a name="Fake.Sent"></a>
-### func \(\*Fake\) [Sent](<https://github.com/brpaz/lib-go/blob/main/mailer/fake.go#L32>)
+<a name="InMemory.Sent"></a>
+### func \(\*InMemory\) Sent
 
 ```go
-func (m *Fake) Sent() []Message
+func (m *InMemory) Sent() []Message
 ```
 
 Sent returns a copy of every message recorded so far, in send order.
 
 <a name="Mailer"></a>
-## type [Mailer](<https://github.com/brpaz/lib-go/blob/main/mailer/mailer.go#L34-L38>)
+## type Mailer
 
 Mailer sends email messages.
 
@@ -134,7 +134,7 @@ type Mailer interface {
 ```
 
 <a name="Message"></a>
-## type [Message](<https://github.com/brpaz/lib-go/blob/main/mailer/mailer.go#L12-L27>)
+## type Message
 
 Message is an email to be sent.
 
@@ -158,7 +158,7 @@ type Message struct {
 ```
 
 <a name="Noop"></a>
-## type [Noop](<https://github.com/brpaz/lib-go/blob/main/mailer/noop.go#L7>)
+## type Noop
 
 Noop is a [Mailer](<#Mailer>) that discards every message. Use it as a default when email sending is disabled or irrelevant to the code under test.
 
@@ -167,7 +167,7 @@ type Noop struct{}
 ```
 
 <a name="NewNoop"></a>
-### func [NewNoop](<https://github.com/brpaz/lib-go/blob/main/mailer/noop.go#L10>)
+### func NewNoop
 
 ```go
 func NewNoop() Noop
@@ -176,7 +176,7 @@ func NewNoop() Noop
 NewNoop returns a ready\-to\-use Noop mailer.
 
 <a name="Noop.Send"></a>
-### func \(Noop\) [Send](<https://github.com/brpaz/lib-go/blob/main/mailer/noop.go#L15>)
+### func \(Noop\) Send
 
 ```go
 func (Noop) Send(_ context.Context, _ Message) error
@@ -185,7 +185,7 @@ func (Noop) Send(_ context.Context, _ Message) error
 Send does nothing and returns nil.
 
 <a name="SMTP"></a>
-## type [SMTP](<https://github.com/brpaz/lib-go/blob/main/mailer/smtp.go#L12-L15>)
+## type SMTP
 
 SMTP is a [Mailer](<#Mailer>) that sends mail through an SMTP server using the standard library's net/smtp package.
 
@@ -196,7 +196,7 @@ type SMTP struct {
 ```
 
 <a name="NewSMTP"></a>
-### func [NewSMTP](<https://github.com/brpaz/lib-go/blob/main/mailer/smtp.go#L19>)
+### func NewSMTP
 
 ```go
 func NewSMTP(addr string, auth smtp.Auth) *SMTP
@@ -205,7 +205,7 @@ func NewSMTP(addr string, auth smtp.Auth) *SMTP
 NewSMTP returns a [SMTP](<#SMTP>) mailer that dials addr \(host:port\) and authenticates with auth. Pass nil for auth to skip authentication.
 
 <a name="SMTP.Send"></a>
-### func \(\*SMTP\) [Send](<https://github.com/brpaz/lib-go/blob/main/mailer/smtp.go#L25>)
+### func \(\*SMTP\) Send
 
 ```go
 func (m *SMTP) Send(ctx context.Context, msg Message) error

@@ -53,7 +53,7 @@ See the inter\-repository\-transactions guide in docs/guides/ for a full wiring 
 
 
 <a name="Manager"></a>
-## type [Manager](<https://github.com/brpaz/lib-go/blob/main/uow/uow.go#L15-L17>)
+## type Manager
 
 Manager creates units of work. Inject this into services that need cross\-repository transactions.
 
@@ -64,7 +64,7 @@ type Manager[T any] interface {
 ```
 
 <a name="UnitOfWork"></a>
-## type [UnitOfWork](<https://github.com/brpaz/lib-go/blob/main/uow/uow.go#L7-L11>)
+## type UnitOfWork
 
 UnitOfWork represents an atomic unit of database operations. T is the module\-specific repository bundle available within the transaction.
 

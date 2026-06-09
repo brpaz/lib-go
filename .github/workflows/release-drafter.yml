@@ -17,8 +17,16 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
-      - uses: release-drafter/release-drafter@v7
+      - name: Draft root module release
+        uses: release-drafter/release-drafter@v7
         with:
           config-name: release-drafter-config.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Draft tracing/otelsetup module release
+        uses: release-drafter/release-drafter@v7
+        with:
+          config-name: release-drafter-tracing-otelsetup-config.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

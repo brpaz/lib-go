@@ -1,45 +1,54 @@
 # Taskfile is used to run common tasks when developing the application.
 # Check : https://taskfile.dev/usage/
 version: "3"
-
+silent: true
 vars:
   REPORTS_DIR: reports
+  GO_MODULES:
+    sh: git ls-files "*/go.mod" "go.mod" | xargs dirname | sort
 tasks:
   default:
     cmds:
       - task -l
 
-  # ==================================================
-  # Linting and Tests
-  # ==================================================
   lint:
     desc: Lints Go code using golangci-lint
     cmds:
-      - golangci-lint run --fix
+      - for:
+          var: GO_MODULES
+        cmd: cd {{.TASKFILE_DIR}}/{{.ITEM}} && golangci-lint run --fix
 
   fmt:
     desc: Formats all code
     cmds:
-      - gofumpt -l -w .
+      - for:
+          var: GO_MODULES
+        cmd: gofumpt -l -w {{.TASKFILE_DIR}}/{{.ITEM}}
+
+  test:
+    desc: Runs tests for all modules
+    cmds:
+      - for:
+          var: GO_MODULES
+        cmd: |
+          LABEL=$([ "{{.ITEM}}" = "." ] && echo "root" || echo "{{.ITEM}}" | tr "/" "-")
+          mkdir -p {{.TASKFILE_DIR}}/{{.REPORTS_DIR}}/$LABEL
+          cd {{.TASKFILE_DIR}}/{{.ITEM}} && gotestsum --format="testname" \
+            --junitfile {{.TASKFILE_DIR}}/{{.REPORTS_DIR}}/$LABEL/unit-tests.xml \
+            --jsonfile {{.TASKFILE_DIR}}/{{.REPORTS_DIR}}/$LABEL/unit-tests.json \
+            -- -coverprofile={{.TASKFILE_DIR}}/{{.REPORTS_DIR}}/$LABEL/cover.out -covermode=atomic \
+            ./...
 
   gen-docs:
     desc: Generates godoc documentation for all packages
     cmds:
-      - gomarkdoc --output "{{ print `{{.Dir}}/README.md` }}" ./...
+      - for:
+          var: GO_MODULES
+        cmd: cd {{.TASKFILE_DIR}}/{{.ITEM}} && gomarkdoc --output "{{ print `{{.Dir}}/README.md` }}" --exclude-dirs ".devenv/..." ./...
 
-  test:
-    desc: Runs application tests
-    summary: Executes all package level tests (unit and integration)
+  tidy:
+    desc: Runs go mod tidy for all modules
     cmds:
-      - mkdir -p {{.REPORTS_DIR}}
-      - |
-        gotestsum --format="testname" \
-          --junitfile {{.REPORTS_DIR}}/unit-tests.xml \
-          --jsonfile {{.REPORTS_DIR}}/unit-tests.json \
-          -- -coverprofile={{.REPORTS_DIR}}/cover.out -covermode=atomic \
-          ./...
-
-  cover-report:
-    desc: Opens the test coverage report in the browser
-    cmds:
-      - go tool cover -html=reports/cover.out
+      - for:
+          var: GO_MODULES
+        cmd: cd {{.TASKFILE_DIR}}/{{.ITEM}} && go mod tidy

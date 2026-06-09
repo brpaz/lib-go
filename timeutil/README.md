@@ -149,7 +149,7 @@ fake.Tick(time.Now())
 
 
 <a name="Clock"></a>
-## type [Clock](<https://github.com/brpaz/lib-go/blob/main/timeutil/clock.go#L6-L8>)
+## type Clock
 
 Clock provides the current time. Inject it into structs that need time so tests can control it.
 
@@ -160,7 +160,7 @@ type Clock interface {
 ```
 
 <a name="FakeSleeper"></a>
-## type [FakeSleeper](<https://github.com/brpaz/lib-go/blob/main/timeutil/sleeper.go#L25-L28>)
+## type FakeSleeper
 
 FakeSleeper records every requested duration instead of sleeping. Use it in tests to assert on retry/backoff schedules without waiting for real time to pass. Safe for concurrent use.
 
@@ -172,7 +172,7 @@ type FakeSleeper struct {
 ```
 
 <a name="NewFakeSleeper"></a>
-### func [NewFakeSleeper](<https://github.com/brpaz/lib-go/blob/main/timeutil/sleeper.go#L31>)
+### func NewFakeSleeper
 
 ```go
 func NewFakeSleeper() *FakeSleeper
@@ -181,7 +181,7 @@ func NewFakeSleeper() *FakeSleeper
 NewFakeSleeper creates an empty FakeSleeper.
 
 <a name="FakeSleeper.Calls"></a>
-### func \(\*FakeSleeper\) [Calls](<https://github.com/brpaz/lib-go/blob/main/timeutil/sleeper.go#L44>)
+### func \(\*FakeSleeper\) Calls
 
 ```go
 func (s *FakeSleeper) Calls() []time.Duration
@@ -190,7 +190,7 @@ func (s *FakeSleeper) Calls() []time.Duration
 Calls returns a copy of every duration recorded so far, in call order.
 
 <a name="FakeSleeper.Sleep"></a>
-### func \(\*FakeSleeper\) [Sleep](<https://github.com/brpaz/lib-go/blob/main/timeutil/sleeper.go#L36>)
+### func \(\*FakeSleeper\) Sleep
 
 ```go
 func (s *FakeSleeper) Sleep(d time.Duration)
@@ -199,7 +199,7 @@ func (s *FakeSleeper) Sleep(d time.Duration)
 Sleep records d instead of sleeping.
 
 <a name="FakeSleeper.Total"></a>
-### func \(\*FakeSleeper\) [Total](<https://github.com/brpaz/lib-go/blob/main/timeutil/sleeper.go#L55>)
+### func \(\*FakeSleeper\) Total
 
 ```go
 func (s *FakeSleeper) Total() time.Duration
@@ -208,7 +208,7 @@ func (s *FakeSleeper) Total() time.Duration
 Total returns the sum of every duration recorded so far.
 
 <a name="FakeTicker"></a>
-## type [FakeTicker](<https://github.com/brpaz/lib-go/blob/main/timeutil/ticker.go#L40-L45>)
+## type FakeTicker
 
 FakeTicker delivers ticks only when told to via Tick. Use it in tests to drive periodic code deterministically without waiting on real time. Safe for concurrent use.
 
@@ -219,7 +219,7 @@ type FakeTicker struct {
 ```
 
 <a name="NewFakeTicker"></a>
-### func [NewFakeTicker](<https://github.com/brpaz/lib-go/blob/main/timeutil/ticker.go#L48>)
+### func NewFakeTicker
 
 ```go
 func NewFakeTicker() *FakeTicker
@@ -228,7 +228,7 @@ func NewFakeTicker() *FakeTicker
 NewFakeTicker creates a FakeTicker with an unbuffered channel.
 
 <a name="FakeTicker.C"></a>
-### func \(\*FakeTicker\) [C](<https://github.com/brpaz/lib-go/blob/main/timeutil/ticker.go#L52>)
+### func \(\*FakeTicker\) C
 
 ```go
 func (t *FakeTicker) C() <-chan time.Time
@@ -237,7 +237,7 @@ func (t *FakeTicker) C() <-chan time.Time
 
 
 <a name="FakeTicker.Stop"></a>
-### func \(\*FakeTicker\) [Stop](<https://github.com/brpaz/lib-go/blob/main/timeutil/ticker.go#L63>)
+### func \(\*FakeTicker\) Stop
 
 ```go
 func (t *FakeTicker) Stop()
@@ -246,7 +246,7 @@ func (t *FakeTicker) Stop()
 Stop marks the ticker as stopped. Safe to call multiple times.
 
 <a name="FakeTicker.Stopped"></a>
-### func \(\*FakeTicker\) [Stopped](<https://github.com/brpaz/lib-go/blob/main/timeutil/ticker.go#L71>)
+### func \(\*FakeTicker\) Stopped
 
 ```go
 func (t *FakeTicker) Stopped() bool
@@ -255,7 +255,7 @@ func (t *FakeTicker) Stopped() bool
 Stopped reports whether Stop has been called.
 
 <a name="FakeTicker.Tick"></a>
-### func \(\*FakeTicker\) [Tick](<https://github.com/brpaz/lib-go/blob/main/timeutil/ticker.go#L58>)
+### func \(\*FakeTicker\) Tick
 
 ```go
 func (t *FakeTicker) Tick(tm time.Time)
@@ -264,7 +264,7 @@ func (t *FakeTicker) Tick(tm time.Time)
 Tick sends tm on the ticker's channel, simulating an elapsed interval. It blocks until a receiver reads it.
 
 <a name="FixedClock"></a>
-## type [FixedClock](<https://github.com/brpaz/lib-go/blob/main/timeutil/clock.go#L18-L20>)
+## type FixedClock
 
 FixedClock always returns the same time. Use in tests.
 
@@ -275,7 +275,7 @@ type FixedClock struct {
 ```
 
 <a name="NewFixedClock"></a>
-### func [NewFixedClock](<https://github.com/brpaz/lib-go/blob/main/timeutil/clock.go#L27>)
+### func NewFixedClock
 
 ```go
 func NewFixedClock(t time.Time) FixedClock
@@ -284,7 +284,7 @@ func NewFixedClock(t time.Time) FixedClock
 NewFixedClock creates a FixedClock at the given time.
 
 <a name="FixedClock.Now"></a>
-### func \(FixedClock\) [Now](<https://github.com/brpaz/lib-go/blob/main/timeutil/clock.go#L22>)
+### func \(FixedClock\) Now
 
 ```go
 func (c FixedClock) Now() time.Time
@@ -293,7 +293,7 @@ func (c FixedClock) Now() time.Time
 
 
 <a name="RealClock"></a>
-## type [RealClock](<https://github.com/brpaz/lib-go/blob/main/timeutil/clock.go#L11>)
+## type RealClock
 
 RealClock returns the actual current time.
 
@@ -302,7 +302,7 @@ type RealClock struct{}
 ```
 
 <a name="RealClock.Now"></a>
-### func \(RealClock\) [Now](<https://github.com/brpaz/lib-go/blob/main/timeutil/clock.go#L13>)
+### func \(RealClock\) Now
 
 ```go
 func (RealClock) Now() time.Time
@@ -311,7 +311,7 @@ func (RealClock) Now() time.Time
 
 
 <a name="RealSleeper"></a>
-## type [RealSleeper](<https://github.com/brpaz/lib-go/blob/main/timeutil/sleeper.go#L16>)
+## type RealSleeper
 
 RealSleeper sleeps for real, delegating to [time.Sleep](<https://pkg.go.dev/time/#Sleep>).
 
@@ -320,7 +320,7 @@ type RealSleeper struct{}
 ```
 
 <a name="RealSleeper.Sleep"></a>
-### func \(RealSleeper\) [Sleep](<https://github.com/brpaz/lib-go/blob/main/timeutil/sleeper.go#L18>)
+### func \(RealSleeper\) Sleep
 
 ```go
 func (RealSleeper) Sleep(d time.Duration)
@@ -329,7 +329,7 @@ func (RealSleeper) Sleep(d time.Duration)
 
 
 <a name="RealTicker"></a>
-## type [RealTicker](<https://github.com/brpaz/lib-go/blob/main/timeutil/ticker.go#L20-L22>)
+## type RealTicker
 
 RealTicker ticks for real, delegating to [time.Ticker](<https://pkg.go.dev/time/#Ticker>).
 
@@ -340,7 +340,7 @@ type RealTicker struct {
 ```
 
 <a name="NewRealTicker"></a>
-### func [NewRealTicker](<https://github.com/brpaz/lib-go/blob/main/timeutil/ticker.go#L25>)
+### func NewRealTicker
 
 ```go
 func NewRealTicker(d time.Duration) *RealTicker
@@ -349,7 +349,7 @@ func NewRealTicker(d time.Duration) *RealTicker
 NewRealTicker creates a RealTicker that ticks every d.
 
 <a name="RealTicker.C"></a>
-### func \(\*RealTicker\) [C](<https://github.com/brpaz/lib-go/blob/main/timeutil/ticker.go#L29>)
+### func \(\*RealTicker\) C
 
 ```go
 func (t *RealTicker) C() <-chan time.Time
@@ -358,7 +358,7 @@ func (t *RealTicker) C() <-chan time.Time
 
 
 <a name="RealTicker.Stop"></a>
-### func \(\*RealTicker\) [Stop](<https://github.com/brpaz/lib-go/blob/main/timeutil/ticker.go#L33>)
+### func \(\*RealTicker\) Stop
 
 ```go
 func (t *RealTicker) Stop()
@@ -367,7 +367,7 @@ func (t *RealTicker) Stop()
 
 
 <a name="Sleeper"></a>
-## type [Sleeper](<https://github.com/brpaz/lib-go/blob/main/timeutil/sleeper.go#L11-L13>)
+## type Sleeper
 
 Sleeper pauses execution for a duration. Inject it into structs that sleep \(retry/backoff, polling, throttling\) so tests can run instantly instead of waiting on real time.
 
@@ -378,7 +378,7 @@ type Sleeper interface {
 ```
 
 <a name="Ticker"></a>
-## type [Ticker](<https://github.com/brpaz/lib-go/blob/main/timeutil/ticker.go#L11-L17>)
+## type Ticker
 
 Ticker delivers the current time on a channel at regular intervals. Inject it into structs that run periodic work — pollers, schedulers, heartbeats — so tests can drive ticks manually instead of waiting on real intervals.
 

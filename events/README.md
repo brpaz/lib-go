@@ -85,7 +85,7 @@ Code should depend on the [Publisher](<#Publisher>) interface rather than \*[Bus
 
 
 <a name="Bus"></a>
-## type [Bus](<https://github.com/brpaz/lib-go/blob/main/events/bus.go#L9-L12>)
+## type Bus
 
 Bus is a synchronous, in\-process event bus.
 
@@ -96,7 +96,7 @@ type Bus struct {
 ```
 
 <a name="New"></a>
-### func [New](<https://github.com/brpaz/lib-go/blob/main/events/bus.go#L15>)
+### func New
 
 ```go
 func New() *Bus
@@ -105,7 +105,7 @@ func New() *Bus
 New returns a ready\-to\-use Bus.
 
 <a name="Bus.Publish"></a>
-### func \(\*Bus\) [Publish](<https://github.com/brpaz/lib-go/blob/main/events/bus.go#L28>)
+### func \(\*Bus\) Publish
 
 ```go
 func (b *Bus) Publish(ctx context.Context, event Event) error
@@ -114,7 +114,7 @@ func (b *Bus) Publish(ctx context.Context, event Event) error
 Publish calls all handlers registered for event.EventType\(\) in order. Returns the first handler error encountered; remaining handlers are not called.
 
 <a name="Bus.Subscribe"></a>
-### func \(\*Bus\) [Subscribe](<https://github.com/brpaz/lib-go/blob/main/events/bus.go#L20>)
+### func \(\*Bus\) Subscribe
 
 ```go
 func (b *Bus) Subscribe(eventType string, h Handler)
@@ -123,7 +123,7 @@ func (b *Bus) Subscribe(eventType string, h Handler)
 Subscribe registers h to be called whenever an event of the given type is published.
 
 <a name="Event"></a>
-## type [Event](<https://github.com/brpaz/lib-go/blob/main/events/events.go#L6-L8>)
+## type Event
 
 Event is implemented by all domain events.
 
@@ -134,7 +134,7 @@ type Event interface {
 ```
 
 <a name="FakePublisher"></a>
-## type [FakePublisher](<https://github.com/brpaz/lib-go/blob/main/events/publisher.go#L25-L28>)
+## type FakePublisher
 
 FakePublisher records every published event instead of dispatching it. Use it in tests to assert which events a service published, without wiring a [Bus](<#Bus>) and handlers. Safe for concurrent use.
 
@@ -145,7 +145,7 @@ type FakePublisher struct {
 ```
 
 <a name="NewFakePublisher"></a>
-### func [NewFakePublisher](<https://github.com/brpaz/lib-go/blob/main/events/publisher.go#L31>)
+### func NewFakePublisher
 
 ```go
 func NewFakePublisher() *FakePublisher
@@ -154,7 +154,7 @@ func NewFakePublisher() *FakePublisher
 NewFakePublisher creates an empty FakePublisher.
 
 <a name="FakePublisher.Publish"></a>
-### func \(\*FakePublisher\) [Publish](<https://github.com/brpaz/lib-go/blob/main/events/publisher.go#L36>)
+### func \(\*FakePublisher\) Publish
 
 ```go
 func (p *FakePublisher) Publish(_ context.Context, event Event) error
@@ -163,7 +163,7 @@ func (p *FakePublisher) Publish(_ context.Context, event Event) error
 Publish records event and returns nil.
 
 <a name="FakePublisher.Published"></a>
-### func \(\*FakePublisher\) [Published](<https://github.com/brpaz/lib-go/blob/main/events/publisher.go#L46>)
+### func \(\*FakePublisher\) Published
 
 ```go
 func (p *FakePublisher) Published() []Event
@@ -172,7 +172,7 @@ func (p *FakePublisher) Published() []Event
 Published returns a copy of every event recorded so far, in publish order.
 
 <a name="Handler"></a>
-## type [Handler](<https://github.com/brpaz/lib-go/blob/main/events/events.go#L11>)
+## type Handler
 
 Handler is a function that handles a published event.
 
@@ -181,7 +181,7 @@ type Handler func(ctx context.Context, event Event) error
 ```
 
 <a name="NoopPublisher"></a>
-## type [NoopPublisher](<https://github.com/brpaz/lib-go/blob/main/events/publisher.go#L10>)
+## type NoopPublisher
 
 NoopPublisher discards every event. Use it as a default [Publisher](<#Publisher>) when events are disabled or irrelevant to the code under test.
 
@@ -190,7 +190,7 @@ type NoopPublisher struct{}
 ```
 
 <a name="NewNoopPublisher"></a>
-### func [NewNoopPublisher](<https://github.com/brpaz/lib-go/blob/main/events/publisher.go#L13>)
+### func NewNoopPublisher
 
 ```go
 func NewNoopPublisher() NoopPublisher
@@ -199,7 +199,7 @@ func NewNoopPublisher() NoopPublisher
 NewNoopPublisher returns a ready\-to\-use NoopPublisher.
 
 <a name="NoopPublisher.Publish"></a>
-### func \(NoopPublisher\) [Publish](<https://github.com/brpaz/lib-go/blob/main/events/publisher.go#L18>)
+### func \(NoopPublisher\) Publish
 
 ```go
 func (NoopPublisher) Publish(_ context.Context, _ Event) error
@@ -208,7 +208,7 @@ func (NoopPublisher) Publish(_ context.Context, _ Event) error
 Publish does nothing and returns nil.
 
 <a name="Publisher"></a>
-## type [Publisher](<https://github.com/brpaz/lib-go/blob/main/events/events.go#L15-L17>)
+## type Publisher
 
 Publisher is responsible for publishing events to subscribers. Implementations can be in\-process \(like the provided Bus\) or distributed \(e.g., using a message broker\).
 
@@ -219,7 +219,7 @@ type Publisher interface {
 ```
 
 <a name="Subscriber"></a>
-## type [Subscriber](<https://github.com/brpaz/lib-go/blob/main/events/events.go#L20-L22>)
+## type Subscriber
 
 Subscriber allows registration of handlers for specific event types.
 

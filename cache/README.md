@@ -79,7 +79,7 @@ var ErrNotFound = errors.New("cache: key not found")
 ```
 
 <a name="Cache"></a>
-## type [Cache](<https://github.com/brpaz/lib-go/blob/main/cache/cache.go#L18-L29>)
+## type Cache
 
 Cache is a key\-value store with per\-entry expiration.
 
@@ -101,7 +101,7 @@ type Cache interface {
 ```
 
 <a name="InMemory"></a>
-## type [InMemory](<https://github.com/brpaz/lib-go/blob/main/cache/inmemory.go#L13-L16>)
+## type InMemory
 
 InMemory is an in\-process [Cache](<#Cache>) backed by a map. Entries expire lazily — an expired entry is treated as missing and removed the next time it is read, and is replaced outright on the next write to the same key. Safe for concurrent use.
 
@@ -112,7 +112,7 @@ type InMemory struct {
 ```
 
 <a name="NewInMemory"></a>
-### func [NewInMemory](<https://github.com/brpaz/lib-go/blob/main/cache/inmemory.go#L28>)
+### func NewInMemory
 
 ```go
 func NewInMemory() *InMemory
@@ -121,7 +121,7 @@ func NewInMemory() *InMemory
 NewInMemory returns a ready\-to\-use InMemory cache.
 
 <a name="InMemory.Delete"></a>
-### func \(\*InMemory\) [Delete](<https://github.com/brpaz/lib-go/blob/main/cache/inmemory.go#L76>)
+### func \(\*InMemory\) Delete
 
 ```go
 func (c *InMemory) Delete(_ context.Context, key string) error
@@ -130,7 +130,7 @@ func (c *InMemory) Delete(_ context.Context, key string) error
 Delete implements [Cache](<#Cache>).
 
 <a name="InMemory.Get"></a>
-### func \(\*InMemory\) [Get](<https://github.com/brpaz/lib-go/blob/main/cache/inmemory.go#L35>)
+### func \(\*InMemory\) Get
 
 ```go
 func (c *InMemory) Get(_ context.Context, key string) ([]byte, error)
@@ -139,7 +139,7 @@ func (c *InMemory) Get(_ context.Context, key string) ([]byte, error)
 Get implements [Cache](<#Cache>).
 
 <a name="InMemory.Set"></a>
-### func \(\*InMemory\) [Set](<https://github.com/brpaz/lib-go/blob/main/cache/inmemory.go#L59>)
+### func \(\*InMemory\) Set
 
 ```go
 func (c *InMemory) Set(_ context.Context, key string, value []byte, ttl time.Duration) error
@@ -148,7 +148,7 @@ func (c *InMemory) Set(_ context.Context, key string, value []byte, ttl time.Dur
 Set implements [Cache](<#Cache>).
 
 <a name="Noop"></a>
-## type [Noop](<https://github.com/brpaz/lib-go/blob/main/cache/noop.go#L11>)
+## type Noop
 
 Noop is a [Cache](<#Cache>) that stores nothing. Get always returns ErrNotFound and Set/Delete are no\-ops. Use it as a default when caching is disabled or irrelevant to the code under test.
 
@@ -157,7 +157,7 @@ type Noop struct{}
 ```
 
 <a name="NewNoop"></a>
-### func [NewNoop](<https://github.com/brpaz/lib-go/blob/main/cache/noop.go#L14>)
+### func NewNoop
 
 ```go
 func NewNoop() Noop
@@ -166,7 +166,7 @@ func NewNoop() Noop
 NewNoop returns a ready\-to\-use Noop cache.
 
 <a name="Noop.Delete"></a>
-### func \(Noop\) [Delete](<https://github.com/brpaz/lib-go/blob/main/cache/noop.go#L29>)
+### func \(Noop\) Delete
 
 ```go
 func (Noop) Delete(_ context.Context, _ string) error
@@ -175,7 +175,7 @@ func (Noop) Delete(_ context.Context, _ string) error
 Delete does nothing and returns nil.
 
 <a name="Noop.Get"></a>
-### func \(Noop\) [Get](<https://github.com/brpaz/lib-go/blob/main/cache/noop.go#L19>)
+### func \(Noop\) Get
 
 ```go
 func (Noop) Get(_ context.Context, _ string) ([]byte, error)
@@ -184,7 +184,7 @@ func (Noop) Get(_ context.Context, _ string) ([]byte, error)
 Get always returns ErrNotFound.
 
 <a name="Noop.Set"></a>
-### func \(Noop\) [Set](<https://github.com/brpaz/lib-go/blob/main/cache/noop.go#L24>)
+### func \(Noop\) Set
 
 ```go
 func (Noop) Set(_ context.Context, _ string, _ []byte, _ time.Duration) error

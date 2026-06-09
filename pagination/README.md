@@ -90,7 +90,7 @@ const DefaultCursorLimit = 20
 ```
 
 <a name="DecodeCursor"></a>
-## func [DecodeCursor](<https://github.com/brpaz/lib-go/blob/main/pagination/cursor.go#L116>)
+## func DecodeCursor
 
 ```go
 func DecodeCursor(cursor string) ([]string, error)
@@ -99,7 +99,7 @@ func DecodeCursor(cursor string) ([]string, error)
 DecodeCursor decodes an opaque cursor token back to its raw values, in the same order they were passed to EncodeCursor.
 
 <a name="EncodeCursor"></a>
-## func [EncodeCursor](<https://github.com/brpaz/lib-go/blob/main/pagination/cursor.go#L110>)
+## func EncodeCursor
 
 ```go
 func EncodeCursor(values ...string) string
@@ -108,7 +108,7 @@ func EncodeCursor(values ...string) string
 EncodeCursor encodes one or more raw values into a single opaque cursor token. Pass one value per ORDER BY column, in column order, to keep multi\-column sorts stable across pages \(e.g. EncodeCursor\(createdAt, id\)\).
 
 <a name="CursorOption"></a>
-## type [CursorOption](<https://github.com/brpaz/lib-go/blob/main/pagination/cursor.go#L30>)
+## type CursorOption
 
 CursorOption configures the bounds NewCursorPager clamps its limit against.
 
@@ -117,7 +117,7 @@ type CursorOption func(*cursorLimits)
 ```
 
 <a name="WithDefaultLimit"></a>
-### func [WithDefaultLimit](<https://github.com/brpaz/lib-go/blob/main/pagination/cursor.go#L34>)
+### func WithDefaultLimit
 
 ```go
 func WithDefaultLimit(n int) CursorOption
@@ -126,7 +126,7 @@ func WithDefaultLimit(n int) CursorOption
 WithDefaultLimit overrides the limit used when the caller passes a value below 1 \(e.g. an absent query parameter\). Defaults to [DefaultCursorLimit](<#DefaultCursorLimit>).
 
 <a name="WithMaxLimit"></a>
-### func [WithMaxLimit](<https://github.com/brpaz/lib-go/blob/main/pagination/cursor.go#L40>)
+### func WithMaxLimit
 
 ```go
 func WithMaxLimit(n int) CursorOption
@@ -135,7 +135,7 @@ func WithMaxLimit(n int) CursorOption
 WithMaxLimit overrides the upper bound the limit is clamped to. Defaults to [MaxPageSize](<#DefaultPage>).
 
 <a name="CursorPage"></a>
-## type [CursorPage](<https://github.com/brpaz/lib-go/blob/main/pagination/cursor.go#L80-L86>)
+## type CursorPage
 
 CursorPage is a cursor\-paginated result set.
 
@@ -150,7 +150,7 @@ type CursorPage[T any] struct {
 ```
 
 <a name="NewCursorPage"></a>
-### func [NewCursorPage](<https://github.com/brpaz/lib-go/blob/main/pagination/cursor.go#L92>)
+### func NewCursorPage
 
 ```go
 func NewCursorPage[T any](items []T, nextVals, prevVals []string) CursorPage[T]
@@ -159,7 +159,7 @@ func NewCursorPage[T any](items []T, nextVals, prevVals []string) CursorPage[T]
 NewCursorPage builds a CursorPage. nextVals and prevVals are the raw cursor values of the last/first item — one per ORDER BY column, in the same order \(e.g. \[\]string\{createdAt, id\}\). Pass nil \(or empty\) for nextVals/prevVals if there is no next/prev page.
 
 <a name="CursorPager"></a>
-## type [CursorPager](<https://github.com/brpaz/lib-go/blob/main/pagination/cursor.go#L17-L21>)
+## type CursorPager
 
 CursorPager holds cursor\-based pagination input for repository queries.
 
@@ -172,7 +172,7 @@ type CursorPager struct {
 ```
 
 <a name="NewCursorPager"></a>
-### func [NewCursorPager](<https://github.com/brpaz/lib-go/blob/main/pagination/cursor.go#L50>)
+### func NewCursorPager
 
 ```go
 func NewCursorPager(cursor string, limit int, opts ...CursorOption) CursorPager
@@ -185,7 +185,7 @@ pager := pagination.NewCursorPager(cursor, limit, pagination.WithMaxLimit(500))
 ```
 
 <a name="CursorPager.DecodedCursor"></a>
-### func \(CursorPager\) [DecodedCursor](<https://github.com/brpaz/lib-go/blob/main/pagination/cursor.go#L72>)
+### func \(CursorPager\) DecodedCursor
 
 ```go
 func (p CursorPager) DecodedCursor() ([]string, error)
@@ -194,7 +194,7 @@ func (p CursorPager) DecodedCursor() ([]string, error)
 DecodedCursor decodes the opaque cursor to its raw values \(e.g. the last\-seen sort\-key values used to keep a multi\-column ORDER BY stable, such as \[\]string\{createdAt, id\}\). Returns nil if cursor is empty \(first page\).
 
 <a name="OffsetOption"></a>
-## type [OffsetOption](<https://github.com/brpaz/lib-go/blob/main/pagination/offset.go#L24>)
+## type OffsetOption
 
 OffsetOption configures the bounds NewOffsetPager clamps page size against.
 
@@ -203,7 +203,7 @@ type OffsetOption func(*offsetLimits)
 ```
 
 <a name="WithDefaultPageSize"></a>
-### func [WithDefaultPageSize](<https://github.com/brpaz/lib-go/blob/main/pagination/offset.go#L28>)
+### func WithDefaultPageSize
 
 ```go
 func WithDefaultPageSize(n int) OffsetOption
@@ -212,7 +212,7 @@ func WithDefaultPageSize(n int) OffsetOption
 WithDefaultPageSize overrides the page size used when the caller passes a value below 1 \(e.g. an absent query parameter\). Defaults to [DefaultPageSize](<#DefaultPage>).
 
 <a name="WithMaxPageSize"></a>
-### func [WithMaxPageSize](<https://github.com/brpaz/lib-go/blob/main/pagination/offset.go#L34>)
+### func WithMaxPageSize
 
 ```go
 func WithMaxPageSize(n int) OffsetOption
@@ -221,7 +221,7 @@ func WithMaxPageSize(n int) OffsetOption
 WithMaxPageSize overrides the upper bound page size is clamped to. Defaults to [MaxPageSize](<#DefaultPage>).
 
 <a name="OffsetPager"></a>
-## type [OffsetPager](<https://github.com/brpaz/lib-go/blob/main/pagination/offset.go#L12-L15>)
+## type OffsetPager
 
 OffsetPager holds offset\-based pagination input for repository queries.
 
@@ -233,7 +233,7 @@ type OffsetPager struct {
 ```
 
 <a name="NewOffsetPager"></a>
-### func [NewOffsetPager](<https://github.com/brpaz/lib-go/blob/main/pagination/offset.go#L44>)
+### func NewOffsetPager
 
 ```go
 func NewOffsetPager(page, pageSize int, opts ...OffsetOption) OffsetPager
@@ -246,7 +246,7 @@ pager := pagination.NewOffsetPager(page, pageSize, pagination.WithMaxPageSize(50
 ```
 
 <a name="OffsetPager.Limit"></a>
-### func \(OffsetPager\) [Limit](<https://github.com/brpaz/lib-go/blob/main/pagination/offset.go#L71>)
+### func \(OffsetPager\) Limit
 
 ```go
 func (p OffsetPager) Limit() int
@@ -255,7 +255,7 @@ func (p OffsetPager) Limit() int
 Limit returns the DB limit \(same as PageSize\).
 
 <a name="OffsetPager.Offset"></a>
-### func \(OffsetPager\) [Offset](<https://github.com/brpaz/lib-go/blob/main/pagination/offset.go#L66>)
+### func \(OffsetPager\) Offset
 
 ```go
 func (p OffsetPager) Offset() int
@@ -264,7 +264,7 @@ func (p OffsetPager) Offset() int
 Offset returns the DB offset for this page.
 
 <a name="Page"></a>
-## type [Page](<https://github.com/brpaz/lib-go/blob/main/pagination/offset.go#L76-L81>)
+## type Page
 
 Page is a paginated result set for offset\-based pagination.
 
@@ -278,7 +278,7 @@ type Page[T any] struct {
 ```
 
 <a name="NewPage"></a>
-### func [NewPage](<https://github.com/brpaz/lib-go/blob/main/pagination/offset.go#L84>)
+### func NewPage
 
 ```go
 func NewPage[T any](items []T, total int64, pager OffsetPager) Page[T]
@@ -287,7 +287,7 @@ func NewPage[T any](items []T, total int64, pager OffsetPager) Page[T]
 NewPage creates a Page from query results and the originating OffsetPager.
 
 <a name="Page[T].HasNext"></a>
-### func \(Page\[T\]\) [HasNext](<https://github.com/brpaz/lib-go/blob/main/pagination/offset.go#L102>)
+### func \(Page\[T\]\) HasNext
 
 ```go
 func (p Page[T]) HasNext() bool
@@ -296,7 +296,7 @@ func (p Page[T]) HasNext() bool
 HasNext reports whether a next page exists.
 
 <a name="Page[T].HasPrev"></a>
-### func \(Page\[T\]\) [HasPrev](<https://github.com/brpaz/lib-go/blob/main/pagination/offset.go#L107>)
+### func \(Page\[T\]\) HasPrev
 
 ```go
 func (p Page[T]) HasPrev() bool
@@ -305,7 +305,7 @@ func (p Page[T]) HasPrev() bool
 HasPrev reports whether a previous page exists.
 
 <a name="Page[T].TotalPages"></a>
-### func \(Page\[T\]\) [TotalPages](<https://github.com/brpaz/lib-go/blob/main/pagination/offset.go#L94>)
+### func \(Page\[T\]\) TotalPages
 
 ```go
 func (p Page[T]) TotalPages() int

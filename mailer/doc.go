@@ -27,10 +27,10 @@
 //
 //	svc := NewSignupService(mailer.Noop{})
 //
-// Pass [Fake] to assert which messages a service sent, without wiring a real
+// Pass [InMemory] to assert which messages a service sent, without wiring a real
 // transport:
 //
-//	m   := mailer.NewFake()
+//	m   := mailer.NewInMemory()
 //	svc := NewSignupService(m)
 //
 //	_ = svc.Register(ctx, user)

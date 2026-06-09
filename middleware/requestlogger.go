@@ -5,6 +5,7 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/brpaz/lib-go/logging"
@@ -15,6 +16,7 @@ type requestLoggerConfig struct {
 	requestBodyMaxBytes  int64
 	logResponseBody      bool
 	responseBodyMaxBytes int64
+	ignorePaths          []string
 }
 
 // RequestLoggerOption configures [RequestLogger].
@@ -27,6 +29,15 @@ func WithRequestBodyLogging(maxBytes int64) RequestLoggerOption {
 	return func(c *requestLoggerConfig) {
 		c.logRequestBody = true
 		c.requestBodyMaxBytes = maxBytes
+	}
+}
+
+// WithIgnorePaths sets paths to skip logging entirely.
+// A pattern ending in "*" matches by prefix (e.g. "/assets/*" matches "/assets/app.js");
+// any other pattern must match exactly (e.g. "/favicon.ico").
+func WithIgnorePaths(paths ...string) RequestLoggerOption {
+	return func(c *requestLoggerConfig) {
+		c.ignorePaths = append(c.ignorePaths, paths...)
 	}
 }
 
@@ -50,6 +61,11 @@ func RequestLogger(logger *logging.Logger, opts ...RequestLoggerOption) func(htt
 
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if matchesIgnorePath(r.URL.Path, cfg.ignorePaths) {
+				next.ServeHTTP(w, r)
+				return
+			}
+
 			start := time.Now()
 
 			reqLogger := logger.With(
@@ -98,6 +114,21 @@ func RequestLogger(logger *logging.Logger, opts ...RequestLoggerOption) func(htt
 			reqLogger.Info(ctx, "request completed", completionAttrs...)
 		})
 	}
+}
+
+// matchesIgnorePath reports whether path matches any of the given patterns.
+// A trailing "*" makes the pattern a prefix match; otherwise it must match exactly.
+func matchesIgnorePath(path string, patterns []string) bool {
+	for _, pattern := range patterns {
+		if prefix, ok := strings.CutSuffix(pattern, "*"); ok {
+			if strings.HasPrefix(path, prefix) {
+				return true
+			}
+		} else if path == pattern {
+			return true
+		}
+	}
+	return false
 }
 
 // limitedRead reads up to maxBytes from r. Returns the data and whether it was truncated.

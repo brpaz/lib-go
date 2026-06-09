@@ -50,7 +50,7 @@ Package env provides helpers for reading typed values from environment variables
 
 
 <a name="GetBool"></a>
-## func [GetBool](<https://github.com/brpaz/lib-go/blob/main/env/env.go#L25>)
+## func GetBool
 
 ```go
 func GetBool(key string, defaultValue bool) bool
@@ -59,7 +59,7 @@ func GetBool(key string, defaultValue bool) bool
 GetBool returns the boolean value of the environment variable named by key. Truthy values: "true", "1". Any other non\-empty value returns defaultValue.
 
 <a name="GetDuration"></a>
-## func [GetDuration](<https://github.com/brpaz/lib-go/blob/main/env/env.go#L68>)
+## func GetDuration
 
 ```go
 func GetDuration(key string, defaultValue time.Duration) time.Duration
@@ -68,7 +68,7 @@ func GetDuration(key string, defaultValue time.Duration) time.Duration
 GetDuration returns the time.Duration value of the environment variable named by key, or defaultValue if the variable is not set, empty, or unparseable.
 
 <a name="GetFloat"></a>
-## func [GetFloat](<https://github.com/brpaz/lib-go/blob/main/env/env.go#L52>)
+## func GetFloat
 
 ```go
 func GetFloat(key string, defaultValue float64) float64
@@ -77,7 +77,7 @@ func GetFloat(key string, defaultValue float64) float64
 GetFloat returns the float64 value of the environment variable named by key. Invalid values are silently ignored and defaultValue is returned instead.
 
 <a name="GetInt"></a>
-## func [GetInt](<https://github.com/brpaz/lib-go/blob/main/env/env.go#L36>)
+## func GetInt
 
 ```go
 func GetInt(key string, defaultValue int) int
@@ -86,7 +86,7 @@ func GetInt(key string, defaultValue int) int
 GetInt returns the integer value of the environment variable named by key. Invalid values are silently ignored and defaultValue is returned instead.
 
 <a name="GetString"></a>
-## func [GetString](<https://github.com/brpaz/lib-go/blob/main/env/env.go#L14>)
+## func GetString
 
 ```go
 func GetString(key string, defaultValue string) string
@@ -95,7 +95,7 @@ func GetString(key string, defaultValue string) string
 GetString returns the value of the environment variable named by key, or defaultValue if the variable is not set or empty.
 
 <a name="GetStringSlice"></a>
-## func [GetStringSlice](<https://github.com/brpaz/lib-go/blob/main/env/env.go#L85>)
+## func GetStringSlice
 
 ```go
 func GetStringSlice(key string, defaultValue []string) []string
@@ -104,7 +104,7 @@ func GetStringSlice(key string, defaultValue []string) []string
 GetStringSlice returns a slice of strings parsed from a comma\-separated environment variable. Whitespace around each element is trimmed and empty elements are dropped. Returns defaultValue if the variable is not set or empty.
 
 <a name="MustGetBool"></a>
-## func [MustGetBool](<https://github.com/brpaz/lib-go/blob/main/env/env.go#L102>)
+## func MustGetBool
 
 ```go
 func MustGetBool(key string) bool
@@ -113,7 +113,7 @@ func MustGetBool(key string) bool
 MustGetBool returns the boolean value of the environment variable named by key. It panics if the variable is not set, empty, or not one of "true", "1", "false", "0".
 
 <a name="MustGetDuration"></a>
-## func [MustGetDuration](<https://github.com/brpaz/lib-go/blob/main/env/env.go#L143>)
+## func MustGetDuration
 
 ```go
 func MustGetDuration(key string) time.Duration
@@ -122,7 +122,7 @@ func MustGetDuration(key string) time.Duration
 MustGetDuration returns the time.Duration value of the environment variable named by key. It panics if the variable is not set, empty, or not a valid duration.
 
 <a name="MustGetFloat"></a>
-## func [MustGetFloat](<https://github.com/brpaz/lib-go/blob/main/env/env.go#L130>)
+## func MustGetFloat
 
 ```go
 func MustGetFloat(key string) float64
@@ -131,7 +131,7 @@ func MustGetFloat(key string) float64
 MustGetFloat returns the float64 value of the environment variable named by key. It panics if the variable is not set, empty, or not a valid float.
 
 <a name="MustGetInt"></a>
-## func [MustGetInt](<https://github.com/brpaz/lib-go/blob/main/env/env.go#L117>)
+## func MustGetInt
 
 ```go
 func MustGetInt(key string) int
@@ -140,7 +140,7 @@ func MustGetInt(key string) int
 MustGetInt returns the integer value of the environment variable named by key. It panics if the variable is not set, empty, or not a valid integer.
 
 <a name="MustGetString"></a>
-## func [MustGetString](<https://github.com/brpaz/lib-go/blob/main/env/env.go#L96>)
+## func MustGetString
 
 ```go
 func MustGetString(key string) string
@@ -149,7 +149,7 @@ func MustGetString(key string) string
 MustGetString returns the value of the environment variable named by key. It panics if the variable is not set or empty.
 
 <a name="MustGetStringSlice"></a>
-## func [MustGetStringSlice](<https://github.com/brpaz/lib-go/blob/main/env/env.go#L157>)
+## func MustGetStringSlice
 
 ```go
 func MustGetStringSlice(key string) []string

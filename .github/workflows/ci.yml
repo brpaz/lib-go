@@ -24,30 +24,47 @@ permissions:
 
 jobs:
   lint:
-    name: Lint
+    name: Lint (${{ matrix.module }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - module: .
+            go-mod: go.mod
+          - module: tracing/otelsetup
+            go-mod: tracing/otelsetup/go.mod
     steps:
       - uses: actions/checkout@v6
 
       - uses: actions/setup-go@v6
         with:
-          go-version-file: "go.mod"
+          go-version-file: ${{ matrix.go-mod }}
 
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v9.2.1
         with:
           version: ${{ env.GOLANGCI_LINT_VERSION }}
           only-new-issues: true
+          working-directory: ${{ matrix.module }}
 
   test:
-    name: Test
+    name: Test (${{ matrix.module }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - module: .
+            label: root
+            go-mod: go.mod
+          - module: tracing/otelsetup
+            label: tracing-otelsetup
+            go-mod: tracing/otelsetup/go.mod
     steps:
       - uses: actions/checkout@v6
 
       - uses: actions/setup-go@v6
         with:
-          go-version-file: "go.mod"
+          go-version-file: ${{ matrix.go-mod }}
 
       - name: Setup gotestsum
         uses: autero1/action-gotestsum@v2.0.0
@@ -55,34 +72,41 @@ jobs:
           gotestsum_version: ${{ env.GOTESTSUM_VERSION }}
 
       - name: Run tests
+        working-directory: ${{ matrix.module }}
         run: |
-          gotestsum --junitfile reports/unit-tests.xml --jsonfile reports/unit-tests-results.json -- -race -covermode=atomic -coverprofile=cover.txt ./...
+          mkdir -p $GITHUB_WORKSPACE/reports/${{ matrix.label }}
+          gotestsum \
+            --junitfile $GITHUB_WORKSPACE/reports/${{ matrix.label }}/unit-tests.xml \
+            --jsonfile $GITHUB_WORKSPACE/reports/${{ matrix.label }}/unit-tests-results.json \
+            -- -race -covermode=atomic -coverprofile=$GITHUB_WORKSPACE/reports/${{ matrix.label }}/cover.txt \
+            ./...
 
       - name: Generate test report
         uses: dorny/test-reporter@v3
         if: ${{ always() }}
         with:
-          name: Unit Tests Report
-          path: "reports/unit-tests-results.json"
+          name: Unit Tests Report (${{ matrix.module }})
+          path: "reports/${{ matrix.label }}/unit-tests-results.json"
           reporter: golang-json
 
       - name: Upload test report artifact
         uses: actions/upload-artifact@v7
         if: ${{ always() }}
         with:
-          name: unit-test-report
-          path: reports
+          name: unit-test-report-${{ matrix.label }}
+          path: reports/${{ matrix.label }}
 
       - name: Upload code coverage report to Codecov
         if: ${{ always() }}
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: cover.txt
+          files: reports/${{ matrix.label }}/cover.txt
+          flags: ${{ matrix.label }}
 
       - name: Upload test results to Codecov
         if: ${{ cancelled() }}
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./reports/unit-tests.xml
+          files: reports/${{ matrix.label }}/unit-tests.xml
