@@ -1,5 +1,5 @@
-name-template: "tracing/otelsetup $RESOLVED_VERSION"
-tag-template: "tracing/otelsetup/v$RESOLVED_VERSION"
+name-template: "tracing $RESOLVED_VERSION"
+tag-template: "tracing/v$RESOLVED_VERSION"
 categories:
   - title: "Breaking Changes"
     labels:
@@ -100,4 +100,4 @@ template: |
   # What's Changed
   $CHANGES
 
-  **Full Changelog**: <https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...tracing/otelsetup/v$RESOLVED_VERSION>
+  **Full Changelog**: <https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...tracing/v$RESOLVED_VERSION>

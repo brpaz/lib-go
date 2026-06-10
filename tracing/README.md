@@ -6,12 +6,50 @@
 import "github.com/brpaz/lib-go/tracing"
 ```
 
-Package tracing provides lightweight OpenTelemetry span helpers. It depends only on the OTel API; no SDK or exporter is imported. For provider setup, see [github.com/brpaz/lib\\\-go/tracing/setup](<https://pkg.go.dev/github.com/brpaz/lib-go/tracing/setup/>).
+Package tracing provides OpenTelemetry distributed tracing helpers: a [Provider](<#Provider>) that wires up an OTLP/gRPC TracerProvider, and span helpers \([StartSpan](<#StartSpan>), [EndSpan](<#EndSpan>)\).
+
+For OpenTelemetry trace/span injection into logs, see [github.com/brpaz/lib\\\-go/logging.OtelMiddleware](<https://pkg.go.dev/github.com/brpaz/lib-go/logging/#OtelMiddleware>).
+
+### Provider setup
+
+```
+provider, err := tracing.New(ctx,
+	tracing.WithServiceVersion("1.2.3"),
+	tracing.WithServiceRevision("abc1234"),
+)
+if err != nil {
+	return err
+}
+defer provider.Shutdown(ctx)
+```
+
+The provider is registered as the global OTel tracer provider on creation, so instrumentation libraries \(otelhttp, GORM plugin, etc.\) work without explicit wiring after [New](<#New>) returns. Endpoint, protocol and service name are read from the standard OTel env vars \(OTEL\_EXPORTER\_OTLP\_ENDPOINT, OTEL\_EXPORTER\_OTLP\_PROTOCOL, OTEL\_SERVICE\_NAME\).
+
+### Span helpers
+
+```
+func (s *Svc) Op(ctx context.Context) (_ Result, err error) {
+	ctx, span := tracing.StartSpan(ctx, tracerName, "Op")
+	defer func() { tracing.EndSpan(span, err) }()
+	...
+}
+```
+
+For HTTP middleware and test helpers, see the [tracing/middleware](<https://pkg.go.dev/tracing/middleware/>) and [tracing/tracingtest](<https://pkg.go.dev/tracing/tracingtest/>) sub\-packages.
 
 ## Index
 
 - [func EndSpan\(span trace.Span, err error\)](<#EndSpan>)
 - [func StartSpan\(ctx context.Context, tracerName, spanName string\) \(context.Context, trace.Span\)](<#StartSpan>)
+- [type Option](<#Option>)
+  - [func WithAttributes\(attrs ...attribute.KeyValue\) Option](<#WithAttributes>)
+  - [func WithErrorHandler\(fn func\(err error\)\) Option](<#WithErrorHandler>)
+  - [func WithSampler\(sampler sdktrace.Sampler\) Option](<#WithSampler>)
+  - [func WithServiceRevision\(revision string\) Option](<#WithServiceRevision>)
+  - [func WithServiceVersion\(version string\) Option](<#WithServiceVersion>)
+- [type Provider](<#Provider>)
+  - [func New\(ctx context.Context, opts ...Option\) \(\*Provider, error\)](<#New>)
+  - [func \(p \*Provider\) Shutdown\(ctx context.Context\) error](<#Provider.Shutdown>)
 
 
 <a name="EndSpan"></a>
@@ -37,5 +75,88 @@ func StartSpan(ctx context.Context, tracerName, spanName string) (context.Contex
 ```
 
 StartSpan starts a new span using the named tracer from the global provider. tracerName should be the fully\-qualified package path of the calling package \(e.g. "github.com/acme/app/internal/orders"\).
+
+<a name="Option"></a>
+## type Option
+
+Option configures a [Provider](<#Provider>).
+
+```go
+type Option func(*options)
+```
+
+<a name="WithAttributes"></a>
+### func WithAttributes
+
+```go
+func WithAttributes(attrs ...attribute.KeyValue) Option
+```
+
+WithAttributes adds extra resource attributes \(e.g. deployment.environment\), merged with the service.version and service.revision attributes.
+
+<a name="WithErrorHandler"></a>
+### func WithErrorHandler
+
+```go
+func WithErrorHandler(fn func(err error)) Option
+```
+
+WithErrorHandler registers fn to receive errors reported by the OTel SDK \(e.g. export failures\). By default, these are written to stderr.
+
+<a name="WithSampler"></a>
+### func WithSampler
+
+```go
+func WithSampler(sampler sdktrace.Sampler) Option
+```
+
+WithSampler sets the trace sampler. By default, the SDK's default sampler \(\[sdktrace.ParentBased\] wrapping \[sdktrace.AlwaysSample\]\) is used, which samples every trace.
+
+<a name="WithServiceRevision"></a>
+### func WithServiceRevision
+
+```go
+func WithServiceRevision(revision string) Option
+```
+
+WithServiceRevision sets the service.revision resource attribute \(e.g. a git SHA\).
+
+<a name="WithServiceVersion"></a>
+### func WithServiceVersion
+
+```go
+func WithServiceVersion(version string) Option
+```
+
+WithServiceVersion sets the service.version resource attribute.
+
+<a name="Provider"></a>
+## type Provider
+
+Provider wraps an OTel TracerProvider and provides lifecycle management. It is registered as the global OTel tracer provider on creation.
+
+```go
+type Provider struct {
+    // contains filtered or unexported fields
+}
+```
+
+<a name="New"></a>
+### func New
+
+```go
+func New(ctx context.Context, opts ...Option) (*Provider, error)
+```
+
+New initialises an OTel [Provider](<#Provider>) and registers it as the global tracer provider. Endpoint and protocol are read from standard OTel env vars \(OTEL\_EXPORTER\_OTLP\_ENDPOINT, OTEL\_EXPORTER\_OTLP\_PROTOCOL\). service.name is read from OTEL\_SERVICE\_NAME.
+
+<a name="Provider.Shutdown"></a>
+### func \(\*Provider\) Shutdown
+
+```go
+func (p *Provider) Shutdown(ctx context.Context) error
+```
+
+Shutdown flushes buffered spans and releases provider resources. Defer immediately after a successful [New](<#New>) call.
 
 Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)

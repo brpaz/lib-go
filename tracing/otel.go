@@ -1,4 +1,4 @@
-package otelsetup
+package tracing
 
 import (
 	"context"
@@ -21,6 +21,9 @@ var serviceRevisionKey = attribute.Key("service.revision")
 type options struct {
 	serviceVersion  string
 	serviceRevision string
+	sampler         sdktrace.Sampler
+	attrs           []attribute.KeyValue
+	errHandler      func(err error)
 }
 
 // Option configures a [Provider].
@@ -34,6 +37,25 @@ func WithServiceVersion(version string) Option {
 // WithServiceRevision sets the service.revision resource attribute (e.g. a git SHA).
 func WithServiceRevision(revision string) Option {
 	return func(o *options) { o.serviceRevision = revision }
+}
+
+// WithSampler sets the trace sampler. By default, the SDK's default sampler
+// ([sdktrace.ParentBased] wrapping [sdktrace.AlwaysSample]) is used, which
+// samples every trace.
+func WithSampler(sampler sdktrace.Sampler) Option {
+	return func(o *options) { o.sampler = sampler }
+}
+
+// WithAttributes adds extra resource attributes (e.g. deployment.environment),
+// merged with the service.version and service.revision attributes.
+func WithAttributes(attrs ...attribute.KeyValue) Option {
+	return func(o *options) { o.attrs = attrs }
+}
+
+// WithErrorHandler registers fn to receive errors reported by the OTel SDK
+// (e.g. export failures). By default, these are written to stderr.
+func WithErrorHandler(fn func(err error)) Option {
+	return func(o *options) { o.errHandler = fn }
 }
 
 // Provider wraps an OTel TracerProvider and provides lifecycle management.
@@ -55,18 +77,27 @@ func New(ctx context.Context, opts ...Option) (*Provider, error) {
 
 	res, err := newResource(cfg)
 	if err != nil {
-		return nil, fmt.Errorf("tracing/otelsetup: create resource: %w", err)
+		return nil, fmt.Errorf("tracing: create resource: %w", err)
 	}
 
 	exporter, err := otlptracegrpc.New(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("tracing/otelsetup: create exporter: %w", err)
+		return nil, fmt.Errorf("tracing: create exporter: %w", err)
 	}
 
-	tp := sdktrace.NewTracerProvider(
+	tpOpts := []sdktrace.TracerProviderOption{
 		sdktrace.WithBatcher(exporter),
 		sdktrace.WithResource(res),
-	)
+	}
+	if cfg.sampler != nil {
+		tpOpts = append(tpOpts, sdktrace.WithSampler(cfg.sampler))
+	}
+
+	if cfg.errHandler != nil {
+		otel.SetErrorHandler(otel.ErrorHandlerFunc(cfg.errHandler))
+	}
+
+	tp := sdktrace.NewTracerProvider(tpOpts...)
 	otel.SetTracerProvider(tp)
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(
 		propagation.TraceContext{},
@@ -80,7 +111,7 @@ func New(ctx context.Context, opts ...Option) (*Provider, error) {
 // Defer immediately after a successful [New] call.
 func (p *Provider) Shutdown(ctx context.Context) error {
 	if err := p.shutdown(ctx); err != nil {
-		return fmt.Errorf("tracing/otelsetup: shutdown: %w", err)
+		return fmt.Errorf("tracing: shutdown: %w", err)
 	}
 	return nil
 }
@@ -90,6 +121,7 @@ func newResource(cfg *options) (*resource.Resource, error) {
 		semconv.ServiceVersion(cfg.serviceVersion),
 		serviceRevisionKey.String(cfg.serviceRevision),
 	}
+	attrs = append(attrs, cfg.attrs...)
 	return resource.Merge(
 		resource.Default(),
 		resource.NewWithAttributes(semconv.SchemaURL, attrs...),

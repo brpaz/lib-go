@@ -31,8 +31,8 @@ jobs:
         include:
           - module: .
             go-mod: go.mod
-          - module: tracing/otelsetup
-            go-mod: tracing/otelsetup/go.mod
+          - module: tracing
+            go-mod: tracing/go.mod
     steps:
       - uses: actions/checkout@v6
 
@@ -56,9 +56,9 @@ jobs:
           - module: .
             label: root
             go-mod: go.mod
-          - module: tracing/otelsetup
-            label: tracing-otelsetup
-            go-mod: tracing/otelsetup/go.mod
+          - module: tracing
+            label: tracing
+            go-mod: tracing/go.mod
     steps:
       - uses: actions/checkout@v6
 

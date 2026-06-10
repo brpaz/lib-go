@@ -38,8 +38,6 @@ The purpose of this library is to have those common code in one place, so I can 
 
 - [`logging`](logging/README.md): Structured logger built on `log/slog`.
 - [`mailer`](mailer/README.md): Email abstraction with pluggable backends.
-- [`tracing`](tracing/README.md): OpenTelemetry span helpers (API only, no SDK).
-- [`tracingtest`](tracingtest/README.md): OpenTelemetry test helpers.
 
 ### Testing
 
@@ -51,7 +49,7 @@ The following packages are distributed as separate Go modules to keep heavy depe
 
 | Module | Import path | Description |
 |--------|-------------|-------------|
-| `tracing/otelsetup` | `github.com/brpaz/lib-go/tracing/otelsetup` | OTel `TracerProvider` backed by an OTLP/gRPC exporter. Also provides `NewRecorder` for capturing spans in tests. |
+| `tracing` | `github.com/brpaz/lib-go/tracing` | OpenTelemetry tracing: `Provider` (OTLP/gRPC `TracerProvider`), `StartSpan`/`EndSpan` helpers, and HTTP/test helpers in `tracing/middleware` and `tracing/tracingtest`. |
 
 ## 🚀 Getting started
 
@@ -64,7 +62,7 @@ go get github.com/brpaz/lib-go
 For sub-modules, install them separately:
 
 ```shell
-go get github.com/brpaz/lib-go/tracing/otelsetup
+go get github.com/brpaz/lib-go/tracing
 ```
 
 ### Usage

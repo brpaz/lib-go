@@ -1,4 +1,4 @@
-package otelsetup
+package tracingtest
 
 import (
 	"go.opentelemetry.io/otel"
@@ -16,7 +16,7 @@ type Recorder struct {
 // NewRecorder installs an in-memory OTel provider that records all spans.
 // The previous global provider is restored on Cleanup.
 //
-//	rec := setup.NewRecorder()
+//	rec := tracingtest.NewRecorder()
 //	t.Cleanup(rec.Cleanup)
 func NewRecorder() *Recorder {
 	rec := tracetest.NewSpanRecorder()

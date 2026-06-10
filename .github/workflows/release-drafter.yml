@@ -24,9 +24,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Draft tracing/otelsetup module release
+      - name: Draft tracing module release
         uses: release-drafter/release-drafter@v7
         with:
-          config-name: release-drafter-tracing-otelsetup-config.yml
+          config-name: release-drafter-tracing-config.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
