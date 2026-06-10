@@ -1,8 +1,6 @@
 # TODO
 
 - database utils (transactional outbox pattern, audit log, migrator, connection pool)
-> go-db-utils
-    - accept dialect instead of depending on driver directly.
 - ratelimiter (go-rate-limiter)
 
 ## Other
@@ -10,3 +8,5 @@
 - Circuit Breaker - https://github.com/schigh/circuit
 
 ## Merge app
+
+- modify app to use db and dbtest from lib.
