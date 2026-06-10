@@ -1,23 +1,5 @@
-// Package dbtest provides lightweight, driver-agnostic test helpers for code
-// built on [github.com/brpaz/lib-go/db].
-//
-// # SQLite
-//
-// [NewSQLite] opens an isolated in-memory SQLite database, ready to use as a
-// *gorm.DB. No external services or containers required:
-//
-//	func TestSomething(t *testing.T) {
-//	    gdb, err := dbtest.NewSQLite()
-//	    require.NoError(t, err)
-//	}
-//
-// Pass [WithMigrations] with an [io/fs.FS] containing goose SQL migration
-// files to apply them before [NewSQLite] returns:
-//
-//	//go:embed migrations/*.sql
-//	var migrationsFS embed.FS
-//
-//	gdb, err := dbtest.NewSQLite(dbtest.WithMigrations(migrationsFS))
+// Package dbtest provides lightweight test helpers for code built on
+// [github.com/brpaz/lib-go/db].
 //
 // # Transactions
 //
@@ -32,8 +14,59 @@
 //
 // # PostgreSQL
 //
-// For tests that need a real PostgreSQL instance, see the separate module
-// [github.com/brpaz/lib-go/db/dbtest/postgres], which spins up ephemeral
-// containers via Testcontainers. It is a separate module so that consumers of
-// this package don't pull in Testcontainers and the Postgres driver.
+// [NewPostgresContainer] starts an ephemeral PostgreSQL instance via
+// Testcontainers:
+//
+//	func TestSomething(t *testing.T) {
+//	    pg, err := dbtest.NewPostgresContainer(context.Background())
+//	    require.NoError(t, err)
+//	    pg.Cleanup(t) // terminates the container when t ends
+//	}
+//
+// For a package-scoped container shared across all tests, set a package-level
+// variable from TestMain and use [PostgresContainer.NewIsolatedDB] per test:
+//
+//	var testPG *dbtest.PostgresContainer
+//
+//	func TestMain(m *testing.M) {
+//	    var err error
+//	    testPG, err = dbtest.NewPostgresContainer(context.Background())
+//	    if err != nil { log.Fatal(err) }
+//	    code := m.Run()
+//	    testPG.Terminate(context.Background())
+//	    os.Exit(code)
+//	}
+//
+//	func TestSomething(t *testing.T) {
+//	    db := testPG.NewIsolatedDB(t) // fresh database, dropped on test end
+//	}
+//
+// Use [MigratePostgres] to apply goose SQL migrations to a database before
+// running tests against it (the container's default database, or one
+// returned by [PostgresContainer.NewIsolatedDB]):
+//
+//	//go:embed migrations/*.sql
+//	var migrationsFS embed.FS
+//
+//	pg, err := dbtest.NewPostgresContainer(context.Background())
+//	require.NoError(t, err)
+//	require.NoError(t, dbtest.MigratePostgres(context.Background(), pg.DSN, migrationsFS))
+//
+// # SQLite
+//
+// [NewSQLite] opens a fresh, isolated in-memory SQLite database — no Docker
+// required. Each call gets its own database, safe for parallel tests:
+//
+//	func TestSomething(t *testing.T) {
+//	    gdb, err := dbtest.NewSQLite()
+//	    require.NoError(t, err)
+//	}
+//
+// Pass [WithSQLiteMigrations] to apply goose SQL migrations before
+// [NewSQLite] returns:
+//
+//	//go:embed migrations/*.sql
+//	var migrationsFS embed.FS
+//
+//	gdb, err := dbtest.NewSQLite(dbtest.WithSQLiteMigrations(migrationsFS))
 package dbtest

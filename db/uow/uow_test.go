@@ -17,10 +17,13 @@ type repos struct {
 	DB *gorm.DB
 }
 
+// newGormDB returns a *gorm.DB backed by a fresh, isolated in-memory SQLite database.
 func newGormDB(t *testing.T) *gorm.DB {
 	t.Helper()
+
 	gormDB, err := dbtest.NewSQLite()
 	require.NoError(t, err)
+
 	return gormDB
 }
 

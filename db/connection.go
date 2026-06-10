@@ -30,6 +30,7 @@ type ConnOpts struct {
 	Metrics                bool
 	Tracing                bool
 	DisableAutomaticPing   bool
+	SkipPoolConfig         bool
 	Logger                 *logging.Logger
 }
 
@@ -104,6 +105,15 @@ func WithAutomaticPing() func(*ConnOpts) {
 	}
 }
 
+// WithSkipPoolConfig skips applying MaxIdleConns, MaxOpenConns and ConnMaxLifetime
+// to the underlying *sql.DB, leaving any pool settings already configured
+// (e.g. on an existing *sql.DB passed via the dialector) untouched.
+func WithSkipPoolConfig() func(*ConnOpts) {
+	return func(opts *ConnOpts) {
+		opts.SkipPoolConfig = true
+	}
+}
+
 // WithLogger sets the [logging.Logger] used for GORM query logging.
 // Defaults to a no-op logger when not provided.
 func WithLogger(logger *logging.Logger) func(*ConnOpts) {
@@ -151,9 +161,11 @@ func NewConnection(dialector gorm.Dialector, opts ...func(*ConnOpts)) (*gorm.DB,
 		return nil, fmt.Errorf("db: failed to retrieve sql.DB: %w", err)
 	}
 
-	sqlDB.SetMaxIdleConns(connOpts.MaxIdleConns)
-	sqlDB.SetMaxOpenConns(connOpts.MaxOpenConns)
-	sqlDB.SetConnMaxLifetime(connOpts.ConnMaxLifetime)
+	if !connOpts.SkipPoolConfig {
+		sqlDB.SetMaxIdleConns(connOpts.MaxIdleConns)
+		sqlDB.SetMaxOpenConns(connOpts.MaxOpenConns)
+		sqlDB.SetConnMaxLifetime(connOpts.ConnMaxLifetime)
+	}
 
 	// Optional: OpenTelemetry tracing plugin.
 	if connOpts.Tracing {

@@ -16,7 +16,7 @@ tasks:
     cmds:
       - for:
           var: GO_MODULES
-        cmd: cd {{.TASKFILE_DIR}}/{{.ITEM}} && golangci-lint run --fix
+        cmd: cd {{.TASKFILE_DIR}}/{{.ITEM}} && echo "Run Linting on module {{.ITEM}}" && golangci-lint run --fix
 
   fmt:
     desc: Formats all code
@@ -31,6 +31,7 @@ tasks:
       - for:
           var: GO_MODULES
         cmd: |
+          echo "Running tests for module {{.ITEM}}"
           LABEL=$([ "{{.ITEM}}" = "." ] && echo "root" || echo "{{.ITEM}}" | tr "/" "-")
           mkdir -p {{.TASKFILE_DIR}}/{{.REPORTS_DIR}}/$LABEL
           cd {{.TASKFILE_DIR}}/{{.ITEM}} && gotestsum --format="testname" \
