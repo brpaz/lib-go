@@ -65,6 +65,11 @@ func TestParseSort(t *testing.T) {
 			rawQuery: "sort=-",
 			wantErr:  `invalid sort field "-"`,
 		},
+		{
+			name:     "empty segment is skipped",
+			rawQuery: "sort=,name",
+			want:     sorting.Sorts{{Field: "full_name", Dir: sorting.ASC}},
+		},
 	}
 
 	for _, tc := range tests {

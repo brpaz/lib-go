@@ -193,6 +193,29 @@ func TestInternalServerError(t *testing.T) {
 	assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
 }
 
+func TestResponse(t *testing.T) {
+	t.Parallel()
+
+	w := httptest.NewRecorder()
+	httpapi.Response(w, http.StatusTeapot, testPayload{Name: "teapot"})
+
+	assert.Equal(t, http.StatusTeapot, w.Code)
+	assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
+
+	var got testPayload
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&got))
+	assert.Equal(t, testPayload{Name: "teapot"}, got)
+}
+
+func TestWriteJSON_EncodeError(t *testing.T) {
+	t.Parallel()
+
+	w := httptest.NewRecorder()
+	httpapi.Ok(w, make(chan int))
+
+	assert.Contains(t, w.Body.String(), "failed to encode response")
+}
+
 func TestNoContent(t *testing.T) {
 	t.Parallel()
 

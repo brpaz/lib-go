@@ -10,6 +10,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.opentelemetry.io/otel/trace"
 
 	"github.com/brpaz/lib-go/logging"
 )
@@ -162,6 +163,46 @@ func TestLogger_GlobalAttrs_Custom(t *testing.T) {
 	rec := decodeRecord(t, &buf)
 	assert.Equal(t, "payments", rec["service"])
 	assert.Equal(t, "eu-west-1", rec["region"])
+}
+
+// recordingSpan is a [trace.Span] that reports itself as recording with a
+// fixed [trace.SpanContext], for testing [logging.TraceIDFromContext].
+type recordingSpan struct {
+	trace.Span
+	sc trace.SpanContext
+}
+
+func (s recordingSpan) IsRecording() bool             { return true }
+func (s recordingSpan) SpanContext() trace.SpanContext { return s.sc }
+
+func TestTraceIDFromContext(t *testing.T) {
+	t.Parallel()
+
+	t.Run("no active span returns empty string", func(t *testing.T) {
+		t.Parallel()
+
+		assert.Empty(t, logging.TraceIDFromContext(context.Background()))
+	})
+
+	t.Run("active span returns its trace ID", func(t *testing.T) {
+		t.Parallel()
+
+		traceID, err := trace.TraceIDFromHex("0123456789abcdef0123456789abcdef")
+		require.NoError(t, err)
+
+		spanID, err := trace.SpanIDFromHex("0123456789abcdef")
+		require.NoError(t, err)
+
+		sc := trace.NewSpanContext(trace.SpanContextConfig{
+			TraceID:    traceID,
+			SpanID:     spanID,
+			TraceFlags: trace.FlagsSampled,
+		})
+
+		ctx := trace.ContextWithSpan(context.Background(), recordingSpan{sc: sc})
+
+		assert.Equal(t, traceID.String(), logging.TraceIDFromContext(ctx))
+	})
 }
 
 func TestFromContext_NoLogger_Noop(t *testing.T) {

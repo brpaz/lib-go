@@ -1,7 +1,10 @@
 package nullable_test
 
 import (
+	"database/sql/driver"
 	"encoding/json"
+	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,6 +12,40 @@ import (
 
 	"github.com/brpaz/lib-go/nullable"
 )
+
+// textAndScanType implements [encoding.TextMarshaler], [encoding.TextUnmarshaler],
+// [sql.Scanner] and [driver.Valuer], for exercising those code paths in
+// [nullable.Value].
+type textAndScanType struct {
+	v string
+}
+
+func (t textAndScanType) MarshalText() ([]byte, error) {
+	return []byte("custom:" + t.v), nil
+}
+
+func (t *textAndScanType) UnmarshalText(text []byte) error {
+	const prefix = "custom:"
+	s := string(text)
+	if !strings.HasPrefix(s, prefix) {
+		return fmt.Errorf("invalid textAndScanType text %q", s)
+	}
+	t.v = strings.TrimPrefix(s, prefix)
+	return nil
+}
+
+func (t *textAndScanType) Scan(src any) error {
+	s, ok := src.(string)
+	if !ok {
+		return fmt.Errorf("textAndScanType: cannot scan %T", src)
+	}
+	t.v = s
+	return nil
+}
+
+func (t textAndScanType) Value() (driver.Value, error) {
+	return t.v, nil
+}
 
 func TestOf(t *testing.T) {
 	t.Parallel()
@@ -292,6 +329,38 @@ func TestScan(t *testing.T) {
 		assert.True(t, n.Valid)
 		assert.Equal(t, int64(42), n.Val)
 	})
+
+	t.Run("convertible type src sets valid", func(t *testing.T) {
+		t.Parallel()
+		var n nullable.Value[int]
+		require.NoError(t, n.Scan(int64(42)))
+		assert.True(t, n.Valid)
+		assert.Equal(t, 42, n.Val)
+	})
+
+	t.Run("incompatible type returns error", func(t *testing.T) {
+		t.Parallel()
+		var n nullable.Value[int]
+		err := n.Scan("not-an-int")
+		require.Error(t, err)
+		assert.False(t, n.Valid)
+	})
+
+	t.Run("sql.Scanner implementation", func(t *testing.T) {
+		t.Parallel()
+		var n nullable.Value[textAndScanType]
+		require.NoError(t, n.Scan("hello"))
+		assert.True(t, n.Valid)
+		assert.Equal(t, "hello", n.Val.v)
+	})
+
+	t.Run("sql.Scanner implementation returns error", func(t *testing.T) {
+		t.Parallel()
+		var n nullable.Value[textAndScanType]
+		err := n.Scan(42)
+		require.Error(t, err)
+		assert.False(t, n.Valid)
+	})
 }
 
 func TestValue(t *testing.T) {
@@ -311,6 +380,14 @@ func TestValue(t *testing.T) {
 		v, err := n.Value()
 		require.NoError(t, err)
 		assert.Equal(t, "world", v)
+	})
+
+	t.Run("driver.Valuer implementation", func(t *testing.T) {
+		t.Parallel()
+		n := nullable.Of(textAndScanType{v: "z"})
+		v, err := n.Value()
+		require.NoError(t, err)
+		assert.Equal(t, "z", v)
 	})
 }
 
@@ -336,6 +413,20 @@ func TestMarshalText(t *testing.T) {
 		data, err := nullable.Of(42).MarshalText()
 		require.NoError(t, err)
 		assert.Equal(t, "42", string(data))
+	})
+
+	t.Run("uint", func(t *testing.T) {
+		t.Parallel()
+		data, err := nullable.Of(uint(42)).MarshalText()
+		require.NoError(t, err)
+		assert.Equal(t, "42", string(data))
+	})
+
+	t.Run("TextMarshaler implementation", func(t *testing.T) {
+		t.Parallel()
+		data, err := nullable.Of(textAndScanType{v: "x"}).MarshalText()
+		require.NoError(t, err)
+		assert.Equal(t, "custom:x", string(data))
 	})
 
 	t.Run("float", func(t *testing.T) {
@@ -393,6 +484,22 @@ func TestUnmarshalText(t *testing.T) {
 		assert.False(t, n.Valid)
 	})
 
+	t.Run("uint", func(t *testing.T) {
+		t.Parallel()
+		var n nullable.Value[uint]
+		require.NoError(t, n.UnmarshalText([]byte("42")))
+		assert.True(t, n.Valid)
+		assert.Equal(t, uint(42), n.Val)
+	})
+
+	t.Run("invalid uint returns error", func(t *testing.T) {
+		t.Parallel()
+		var n nullable.Value[uint]
+		err := n.UnmarshalText([]byte("-1"))
+		require.Error(t, err)
+		assert.False(t, n.Valid)
+	})
+
 	t.Run("float", func(t *testing.T) {
 		t.Parallel()
 		var n nullable.Value[float64]
@@ -401,12 +508,44 @@ func TestUnmarshalText(t *testing.T) {
 		assert.InDelta(t, 3.14, n.Val, 0.0001)
 	})
 
+	t.Run("invalid float returns error", func(t *testing.T) {
+		t.Parallel()
+		var n nullable.Value[float64]
+		err := n.UnmarshalText([]byte("abc"))
+		require.Error(t, err)
+		assert.False(t, n.Valid)
+	})
+
 	t.Run("bool", func(t *testing.T) {
 		t.Parallel()
 		var n nullable.Value[bool]
 		require.NoError(t, n.UnmarshalText([]byte("true")))
 		assert.True(t, n.Valid)
 		assert.True(t, n.Val)
+	})
+
+	t.Run("invalid bool returns error", func(t *testing.T) {
+		t.Parallel()
+		var n nullable.Value[bool]
+		err := n.UnmarshalText([]byte("not-a-bool"))
+		require.Error(t, err)
+		assert.False(t, n.Valid)
+	})
+
+	t.Run("TextUnmarshaler implementation", func(t *testing.T) {
+		t.Parallel()
+		var n nullable.Value[textAndScanType]
+		require.NoError(t, n.UnmarshalText([]byte("custom:y")))
+		assert.True(t, n.Valid)
+		assert.Equal(t, "y", n.Val.v)
+	})
+
+	t.Run("TextUnmarshaler implementation returns error", func(t *testing.T) {
+		t.Parallel()
+		var n nullable.Value[textAndScanType]
+		err := n.UnmarshalText([]byte("not-custom"))
+		require.Error(t, err)
+		assert.False(t, n.Valid)
 	})
 
 	t.Run("unsupported type returns error", func(t *testing.T) {
