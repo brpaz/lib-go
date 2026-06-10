@@ -3,6 +3,5 @@ go 1.26.2
 use (
 	.
 	./db
-	./db/outbox/postgres
 	./tracing
 )
