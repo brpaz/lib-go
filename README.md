@@ -50,6 +50,7 @@ The following packages are distributed as separate Go modules to keep heavy depe
 | Module | Import path | Description |
 |--------|-------------|-------------|
 | `tracing` | `github.com/brpaz/lib-go/tracing` | OpenTelemetry tracing: `Provider` (OTLP/gRPC `TracerProvider`), `StartSpan`/`EndSpan` helpers, and HTTP/test helpers in `tracing/middleware` and `tracing/tracingtest`. |
+| `db` | `github.com/brpaz/lib-go/db` | Driver-agnostic database connectivity helpers built on GORM, with `migrator` (goose schema migrations), `uow` (GORM-backed unit of work), `gormlog` (GORM logger adapters) and `dbtest` (Postgres testcontainers / SQLite test helpers). |
 
 ## 🚀 Getting started
 
@@ -63,6 +64,7 @@ For sub-modules, install them separately:
 
 ```shell
 go get github.com/brpaz/lib-go/tracing
+go get github.com/brpaz/lib-go/db
 ```
 
 ### Usage
