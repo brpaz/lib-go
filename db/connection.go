@@ -167,7 +167,6 @@ func NewConnection(dialector gorm.Dialector, opts ...func(*ConnOpts)) (*gorm.DB,
 		sqlDB.SetConnMaxLifetime(connOpts.ConnMaxLifetime)
 	}
 
-	// Optional: OpenTelemetry tracing plugin.
 	if connOpts.Tracing {
 		if err := db.Use(tracing.NewPlugin()); err != nil {
 			return nil, fmt.Errorf("db: failed to register tracing plugin: %w", err)
