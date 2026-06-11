@@ -25,6 +25,7 @@ jobs:
       tracing: ${{ steps.filter.outputs.tracing }}
       db: ${{ steps.filter.outputs.db }}
       shared: ${{ steps.filter.outputs.shared }}
+      non_changelog: ${{ steps.filter.outputs.non_changelog }}
     steps:
       - uses: actions/checkout@v6
 
@@ -39,22 +40,24 @@ jobs:
               - '.golangci.yml'
             tracing:
               - 'tracing/**'
-              - '!tracing/CHANGELOG.md'
             db:
               - 'db/**'
-              - '!db/CHANGELOG.md'
             root:
               - '**'
               - '!tracing/**'
               - '!db/**'
+            non_changelog:
+              - '**'
+              - '!**/CHANGELOG.md'
 
   root:
     name: Root
     needs: changes
     if: |
-      needs.changes.outputs.shared == 'true' ||
-      needs.changes.outputs.root == 'true' ||
-      github.event_name == 'workflow_dispatch'
+      github.event_name == 'workflow_dispatch' ||
+      (needs.changes.outputs.non_changelog == 'true' &&
+        (needs.changes.outputs.shared == 'true' ||
+         needs.changes.outputs.root == 'true'))
     uses: ./.github/workflows/_module-ci.yml
     with:
       module: .
@@ -66,9 +69,10 @@ jobs:
     name: Tracing
     needs: changes
     if: |
-      needs.changes.outputs.shared == 'true' ||
-      needs.changes.outputs.tracing == 'true' ||
-      github.event_name == 'workflow_dispatch'
+      github.event_name == 'workflow_dispatch' ||
+      (needs.changes.outputs.non_changelog == 'true' &&
+        (needs.changes.outputs.shared == 'true' ||
+         needs.changes.outputs.tracing == 'true'))
     uses: ./.github/workflows/_module-ci.yml
     with:
       module: tracing
@@ -80,10 +84,11 @@ jobs:
     name: DB
     needs: changes
     if: |
-      needs.changes.outputs.shared == 'true' ||
-      needs.changes.outputs.root == 'true' ||
-      needs.changes.outputs.db == 'true' ||
-      github.event_name == 'workflow_dispatch'
+      github.event_name == 'workflow_dispatch' ||
+      (needs.changes.outputs.non_changelog == 'true' &&
+        (needs.changes.outputs.shared == 'true' ||
+         needs.changes.outputs.root == 'true' ||
+         needs.changes.outputs.db == 'true'))
     uses: ./.github/workflows/_module-ci.yml
     with:
       module: db
