@@ -3,7 +3,7 @@ module github.com/brpaz/lib-go/db
 go 1.26.2
 
 require (
-	github.com/brpaz/lib-go v0.0.0
+	github.com/brpaz/lib-go v0.1.1
 	github.com/glebarez/sqlite v1.11.0
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.9.2

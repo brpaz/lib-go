@@ -30,6 +30,7 @@ jobs:
           command: release-pr
           command_args: >-
             --forge github
+            --debug
             --repo ${{ github.server_url }}/${{ github.repository }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
