@@ -39,8 +39,10 @@ jobs:
               - '.golangci.yml'
             tracing:
               - 'tracing/**'
+              - '!tracing/CHANGELOG.md'
             db:
               - 'db/**'
+              - !'db/CHANGELOG.md'
             root:
               - '**'
               - '!tracing/**'
