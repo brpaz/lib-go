@@ -10,9 +10,6 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-      contents: write
     steps:
       - name: Create Release PR
         uses: robgonnella/releasaurus/action@v0.20.4
@@ -23,4 +20,3 @@ jobs:
             --repo ${{ github.server_url }}/${{ github.repository }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RUST_BACKTRACE: 1
