@@ -42,7 +42,7 @@ jobs:
               - '!tracing/CHANGELOG.md'
             db:
               - 'db/**'
-              - !'db/CHANGELOG.md'
+              - '!db/CHANGELOG.md'
             root:
               - '**'
               - '!tracing/**'
