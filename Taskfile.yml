@@ -3,6 +3,7 @@
 version: "3"
 silent: true
 vars:
+  REPO_URL: https://github.com/brpaz/lib-go"
   REPORTS_DIR: reports
   GO_MODULES:
     sh: git ls-files "*/go.mod" "go.mod" | xargs dirname | sort
@@ -53,3 +54,10 @@ tasks:
       - for:
           var: GO_MODULES
         cmd: cd {{.TASKFILE_DIR}}/{{.ITEM}} && go mod tidy
+
+  release:
+    desc: Creates a new release using releasaurus
+    cmds:
+      - |
+        releasaurus release-pr --repo {{ .REPO_URL }}
+        releasaurus release --repo {{ .REPO_URL }}
