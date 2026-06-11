@@ -3,9 +3,15 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: release
+  cancel-in-progress: true
+
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - name: Create Release PR
         uses: robgonnella/releasaurus/action@v0.20.4
