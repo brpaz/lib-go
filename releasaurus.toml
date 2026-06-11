@@ -1,0 +1,17 @@
+[changelog]
+skip_ci = true
+include_author = true
+
+[[package]]
+path = "./"
+release_type = "go"
+
+[[package]]
+path = "./tracing"
+release_type = "go"
+tag_prefix = "tracing/v"
+
+[[package]]
+path = "./db/"
+release_type = "go"
+tag_prefix = "db/v"

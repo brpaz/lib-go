@@ -1,40 +1,22 @@
-name: Update Changelog
-
+name: Release
 on:
-  release:
-    types:
-      - published
+  push:
+    branches: [main]
 
 jobs:
-  changelog:
-    name: Update Changelog
+  release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
         with:
-          fetch-depth: 0
-
-      - name: Update Changelog
-        uses: stefanzweifel/changelog-updater-action@v1
+          fetch-depth: 0 # required for --local-path
+      - name: Create Release PR
+        uses: robgonnella/releasaurus/action@v0.20.4
         with:
-          latest-version: ${{ github.event.release.name }}
-          release-notes: ${{ github.event.release.body }}
-
-      - name: Commit updated CHANGELOG
-        uses: stefanzweifel/git-auto-commit-action@v7
-        with:
-          branch: ${{ github.event.release.target_commitish }}
-          commit_message: "chore(release): [skip ci] ${{ github.event.release.tag_name }}"
-          file_pattern: CHANGELOG.md
-
-      - name: Tag submodules
-        run: |
-          version="${{ github.event.release.tag_name }}"
-          for mod in tracing db; do
-            tag="$mod/$version"
-            git tag "$tag" HEAD
-            git push origin "$tag"
-          done
+          command: release-pr
+          command_args: >-
+            --forge github
+            --repo ${{ github.server_url }}/${{ github.repository }}
+            --local-path ${{ github.workspace }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

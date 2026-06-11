@@ -40,7 +40,7 @@ tasks:
             -- -coverprofile={{.TASKFILE_DIR}}/{{.REPORTS_DIR}}/$LABEL/cover.out -covermode=atomic \
             ./...
 
-  gen-docs:
+  docgen:
     desc: Generates godoc documentation for all packages
     cmds:
       - for:

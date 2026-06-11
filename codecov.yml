@@ -1,0 +1,36 @@
+codecov:
+  require_ci_to_pass: false
+
+flag_management:
+  default_rules:
+    carryforward: true
+  individual_flags:
+    - name: root
+      paths:
+        - "!tracing/**"
+        - "!db/**"
+    - name: tracing
+      paths:
+        - "tracing/**"
+    - name: db
+      paths:
+        - "db/**"
+
+component_management:
+  individual_components:
+    - component_id: root
+      flag_regexes: ["root"]
+    - component_id: tracing
+      flag_regexes: ["tracing"]
+    - component_id: db
+      flag_regexes: ["db"]
+
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
+    patch:
+      default:
+        target: auto

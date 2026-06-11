@@ -1,12 +1,9 @@
 # TODO
 
-- database utils (transactional outbox pattern, audit log, migrator, connection pool)
-- ratelimiter (go-rate-limiter)
+- Increase coverage of tests
 
 ## Other
 
 - Circuit Breaker - https://github.com/schigh/circuit
 
 ## Merge app
-
-- modify app to use db and dbtest from lib.

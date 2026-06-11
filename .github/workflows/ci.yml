@@ -1,17 +1,11 @@
 name: CI
+
 on:
   workflow_dispatch:
   push:
     branches:
       - main
   pull_request:
-  release:
-    types:
-      - published
-
-env:
-  GOTESTSUM_VERSION: 1.12.0
-  GOLANGCI_LINT_VERSION: v2.12.2
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -23,95 +17,74 @@ permissions:
   packages: write
 
 jobs:
-  lint:
-    name: Lint (${{ matrix.module }})
+  changes:
+    name: Detect changes
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - module: .
-            go-mod: go.mod
-          - module: tracing
-            go-mod: tracing/go.mod
-          - module: db
-            go-mod: db/go.mod
+    outputs:
+      root: ${{ steps.filter.outputs.root }}
+      tracing: ${{ steps.filter.outputs.tracing }}
+      db: ${{ steps.filter.outputs.db }}
+      shared: ${{ steps.filter.outputs.shared }}
     steps:
       - uses: actions/checkout@v6
 
-      - uses: actions/setup-go@v6
+      - uses: dorny/paths-filter@v3
+        id: filter
         with:
-          go-version-file: ${{ matrix.go-mod }}
+          filters: |
+            shared:
+              - '.github/workflows/**'
+              - 'go.work'
+              - 'go.work.sum'
+              - '.golangci.yml'
+            tracing:
+              - 'tracing/**'
+            db:
+              - 'db/**'
+            root:
+              - '**'
+              - '!tracing/**'
+              - '!db/**'
 
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v9.2.1
-        with:
-          version: ${{ env.GOLANGCI_LINT_VERSION }}
-          only-new-issues: true
-          working-directory: ${{ matrix.module }}
+  root:
+    name: Root
+    needs: changes
+    if: |
+      needs.changes.outputs.shared == 'true' ||
+      needs.changes.outputs.root == 'true' ||
+      github.event_name == 'workflow_dispatch'
+    uses: ./.github/workflows/_module-ci.yml
+    with:
+      module: .
+      label: root
+      go-mod: go.mod
+    secrets: inherit
 
-  test:
-    name: Test (${{ matrix.module }})
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - module: .
-            label: root
-            go-mod: go.mod
-          - module: tracing
-            label: tracing
-            go-mod: tracing/go.mod
-          - module: db
-            label: db
-            go-mod: db/go.mod
-    steps:
-      - uses: actions/checkout@v6
+  tracing:
+    name: Tracing
+    needs: changes
+    if: |
+      needs.changes.outputs.shared == 'true' ||
+      needs.changes.outputs.tracing == 'true' ||
+      github.event_name == 'workflow_dispatch'
+    uses: ./.github/workflows/_module-ci.yml
+    with:
+      module: tracing
+      label: tracing
+      go-mod: tracing/go.mod
+    secrets: inherit
 
-      - uses: actions/setup-go@v6
-        with:
-          go-version-file: ${{ matrix.go-mod }}
-
-      - name: Setup gotestsum
-        uses: autero1/action-gotestsum@v2.0.0
-        with:
-          gotestsum_version: ${{ env.GOTESTSUM_VERSION }}
-
-      - name: Run tests
-        working-directory: ${{ matrix.module }}
-        run: |
-          mkdir -p $GITHUB_WORKSPACE/reports/${{ matrix.label }}
-          gotestsum \
-            --junitfile $GITHUB_WORKSPACE/reports/${{ matrix.label }}/unit-tests.xml \
-            --jsonfile $GITHUB_WORKSPACE/reports/${{ matrix.label }}/unit-tests-results.json \
-            -- -race -covermode=atomic -coverprofile=$GITHUB_WORKSPACE/reports/${{ matrix.label }}/cover.txt \
-            ./...
-
-      - name: Generate test report
-        uses: dorny/test-reporter@v3
-        if: ${{ always() }}
-        with:
-          name: Unit Tests Report (${{ matrix.module }})
-          path: "reports/${{ matrix.label }}/unit-tests-results.json"
-          reporter: golang-json
-
-      - name: Upload test report artifact
-        uses: actions/upload-artifact@v7
-        if: ${{ always() }}
-        with:
-          name: unit-test-report-${{ matrix.label }}
-          path: reports/${{ matrix.label }}
-
-      - name: Upload code coverage report to Codecov
-        if: ${{ always() }}
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: reports/${{ matrix.label }}/cover.txt
-          flags: ${{ matrix.label }}
-
-      - name: Upload test results to Codecov
-        if: ${{ cancelled() }}
-        uses: codecov/test-results-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: reports/${{ matrix.label }}/unit-tests.xml
+  db:
+    name: DB
+    needs: changes
+    if: |
+      needs.changes.outputs.shared == 'true' ||
+      needs.changes.outputs.root == 'true' ||
+      needs.changes.outputs.db == 'true' ||
+      github.event_name == 'workflow_dispatch'
+    uses: ./.github/workflows/_module-ci.yml
+    with:
+      module: db
+      label: db
+      go-mod: db/go.mod
+    secrets: inherit

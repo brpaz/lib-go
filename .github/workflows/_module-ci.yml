@@ -1,0 +1,98 @@
+name: Module CI
+
+on:
+  workflow_call:
+    inputs:
+      module:
+        required: true
+        type: string
+      label:
+        required: true
+        type: string
+      go-mod:
+        required: true
+        type: string
+    secrets:
+      CODECOV_TOKEN:
+        required: false
+
+env:
+  GOTESTSUM_VERSION: 1.12.0
+  GOLANGCI_LINT_VERSION: v2.12.2
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: ${{ inputs.go-mod }}
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v9.2.1
+        with:
+          version: ${{ env.GOLANGCI_LINT_VERSION }}
+          only-new-issues: true
+          working-directory: ${{ inputs.module }}
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: ${{ inputs.go-mod }}
+
+      - name: Setup gotestsum
+        uses: autero1/action-gotestsum@v2.0.0
+        with:
+          gotestsum_version: ${{ env.GOTESTSUM_VERSION }}
+
+      - name: Run tests
+        working-directory: ${{ inputs.module }}
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/reports/${{ inputs.label }}
+          gotestsum \
+            --junitfile $GITHUB_WORKSPACE/reports/${{ inputs.label }}/unit-tests.xml \
+            --jsonfile $GITHUB_WORKSPACE/reports/${{ inputs.label }}/unit-tests-results.json \
+            -- -race -covermode=atomic -coverprofile=$GITHUB_WORKSPACE/reports/${{ inputs.label }}/cover.txt \
+            ./...
+
+      - name: Generate test report
+        uses: dorny/test-reporter@v3
+        if: ${{ !cancelled() }}
+        with:
+          name: Unit Tests Report (${{ inputs.module }})
+          path: "reports/${{ inputs.label }}/unit-tests-results.json"
+          reporter: golang-json
+
+      - name: Upload test report artifact
+        uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: unit-test-report-${{ inputs.label }}
+          path: reports/${{ inputs.label }}
+
+      - name: Upload code coverage report to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: reports/${{ inputs.label }}/cover.txt
+          flags: ${{ inputs.label }}
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: reports/${{ inputs.label }}/unit-tests.xml
