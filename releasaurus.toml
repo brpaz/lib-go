@@ -5,6 +5,7 @@ include_author = true
 [[package]]
 path = "./"
 release_type = "go"
+tag_prefix = "v"
 
 [[package]]
 path = "./tracing"
