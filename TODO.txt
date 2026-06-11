@@ -1,9 +1,0 @@
-# TODO
-
-- Increase coverage of tests
-
-## Other
-
-- Circuit Breaker - https://github.com/schigh/circuit
-
-## Merge app
