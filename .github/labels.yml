@@ -37,3 +37,7 @@
 - name: dependencies
   color: "0366d6"
   description: "Dependency updates"
+
+- name: releasesaurus::pending
+  color: "f9d0c4"
+  description: "Release PR is pending, awaiting review or merge"
