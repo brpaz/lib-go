@@ -21,14 +21,14 @@ jobs:
     name: Detect changes
     runs-on: ubuntu-latest
     outputs:
-      root: ${{ steps.filter.outputs.root }}
-      tracing: ${{ steps.filter.outputs.tracing }}
-      db: ${{ steps.filter.outputs.db }}
+      root: ${{ steps.exclusive.outputs.root }}
+      tracing: ${{ steps.exclusive.outputs.tracing }}
+      db: ${{ steps.exclusive.outputs.db }}
       shared: ${{ steps.filter.outputs.shared }}
-      non_changelog: ${{ steps.filter.outputs.non_changelog }}
     steps:
       - uses: actions/checkout@v6
 
+      # Plain "any pattern matches" filters (default predicate-quantifier: 'some').
       - uses: dorny/paths-filter@v3
         id: filter
         with:
@@ -38,26 +38,33 @@ jobs:
               - 'go.work'
               - 'go.work.sum'
               - '.golangci.yml'
-            tracing:
-              - 'tracing/**'
-            db:
-              - 'db/**'
+
+      # base+exclude filters need 'every' so the '!' patterns actually exclude
+      # (with the default 'some', the leading '**' alone makes these always true).
+      - uses: dorny/paths-filter@v3
+        id: exclusive
+        with:
+          predicate-quantifier: every
+          filters: |
             root:
               - '**'
               - '!tracing/**'
               - '!db/**'
-            non_changelog:
-              - '**'
-              - '!**/CHANGELOG.md'
+              - '!CHANGELOG.md'
+            tracing:
+              - 'tracing/**'
+              - '!tracing/CHANGELOG.md'
+            db:
+              - 'db/**'
+              - '!db/CHANGELOG.md'
 
   root:
     name: Root
     needs: changes
     if: |
-      github.event_name == 'workflow_dispatch' ||
-      (needs.changes.outputs.non_changelog == 'true' &&
-        (needs.changes.outputs.shared == 'true' ||
-         needs.changes.outputs.root == 'true'))
+      needs.changes.outputs.shared == 'true' ||
+      needs.changes.outputs.root == 'true' ||
+      github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/_module-ci.yml
     with:
       module: .
@@ -69,10 +76,9 @@ jobs:
     name: Tracing
     needs: changes
     if: |
-      github.event_name == 'workflow_dispatch' ||
-      (needs.changes.outputs.non_changelog == 'true' &&
-        (needs.changes.outputs.shared == 'true' ||
-         needs.changes.outputs.tracing == 'true'))
+      needs.changes.outputs.shared == 'true' ||
+      needs.changes.outputs.tracing == 'true' ||
+      github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/_module-ci.yml
     with:
       module: tracing
@@ -84,11 +90,10 @@ jobs:
     name: DB
     needs: changes
     if: |
-      github.event_name == 'workflow_dispatch' ||
-      (needs.changes.outputs.non_changelog == 'true' &&
-        (needs.changes.outputs.shared == 'true' ||
-         needs.changes.outputs.root == 'true' ||
-         needs.changes.outputs.db == 'true'))
+      needs.changes.outputs.shared == 'true' ||
+      needs.changes.outputs.root == 'true' ||
+      needs.changes.outputs.db == 'true' ||
+      github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/_module-ci.yml
     with:
       module: db
