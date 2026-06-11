@@ -1,3 +1,21 @@
+# [0.1.1](https://github.com/brpaz/lib-go/compare/v0.1.0...v0.1.1) - 2026-06-11
+
+### 🐛 Bug Fixes
+
+- _(deps)_ update module github.com/pb33f/libopenapi-validator to v0.13.8 (#17) [_(1225f02)_](https://github.com/brpaz/lib-go/commit/1225f02240c1af3d40a6ae3df110444cd600c691) (renovate[bot])
+
+- _(deps)_ update module github.com/jackc/pgx/v5 to v5.10.0 (#18) [_(66c8858)_](https://github.com/brpaz/lib-go/commit/66c88584b0ae05aa8381c52174033c841d60556b) (renovate[bot])
+
+### 🧹 Chore
+
+- updates [_(e364443)_](https://github.com/brpaz/lib-go/commit/e36444324e21a1740f07bf1295a7b5ce88d029b5) (Bruno Paz)
+
+- bump version of db package to correct lib-go version [_(594dea6)_](https://github.com/brpaz/lib-go/commit/594dea63d50791d3def5784691d6f06fc08e09a7) (Bruno Paz)
+
+- _(deps)_ update dorny/paths-filter action to v4 (#24) [_(f430b85)_](https://github.com/brpaz/lib-go/commit/f430b85853dfa4297ecac7695a463c68be0618f3) (renovate[bot])
+
+- add task to release [_(8ba28a1)_](https://github.com/brpaz/lib-go/commit/8ba28a12263ca8aa5d5d70c91f44bc4eb43028d2) (Bruno Paz)
+
 # [0.1.0](https://github.com/brpaz/lib-go/releases/tag/lib-go-v0.1.0) - 2026-06-11
 
 ### 🚀 Features
