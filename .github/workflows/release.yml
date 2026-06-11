@@ -17,6 +17,6 @@ jobs:
           command_args: >-
             --forge github
             --repo ${{ github.server_url }}/${{ github.repository }}
-            --local-path ${{ github.workspace }}
+            --local-path /github/workspace
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
