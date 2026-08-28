@@ -4,7 +4,7 @@ go 1.26.2
 
 require (
 	github.com/google/uuid v1.6.0
-	github.com/lmittmann/tint v1.1.3
+	github.com/lmittmann/tint v1.2.0
 	github.com/pb33f/libopenapi v0.37.3
 	github.com/pb33f/libopenapi-validator v0.13.8
 	github.com/stretchr/testify v1.11.1
