@@ -1,3 +1,17 @@
+# [0.1.1](https://github.com/brpaz/lib-go/compare/db/v0.1.0...db/v0.1.1) - 2026-09-05
+
+### 🐛 Bug Fixes
+
+- _(deps)_ update module github.com/pressly/goose/v3 to v3.28.0 (#43) [_(00c6f36)_](https://github.com/brpaz/lib-go/commit/00c6f36667666eb292109d1ed1db48ce823b2a1a) (renovate[bot])
+
+- _(deps)_ update testcontainers-go monorepo to v0.44.0 (#30) [_(eb54d0f)_](https://github.com/brpaz/lib-go/commit/eb54d0f2afdcb0365fa66a52976390666ff01587) (renovate[bot])
+
+- _(deps)_ update module github.com/stretchr/testify to v1.12.1 (#40) [_(5d3f663)_](https://github.com/brpaz/lib-go/commit/5d3f6632dbda72cc32b69947c3d73269b4beff72) (renovate[bot])
+
+- _(deps)_ update module gorm.io/driver/postgres to v1.6.2 (#36) [_(f078e92)_](https://github.com/brpaz/lib-go/commit/f078e926eec76e0f0a3d62784bdd2c035fee8baf) (renovate[bot])
+
+- _(deps)_ update module github.com/pressly/goose/v3 to v3.27.3 (#33) [_(0ac52b2)_](https://github.com/brpaz/lib-go/commit/0ac52b2530cf92d034979454fb812e857fb46a59) (renovate[bot])
+
 # [0.1.0](https://github.com/brpaz/lib-go/releases/tag/db/v0.1.0) - 2026-06-11
 
 ### 🚀 Features

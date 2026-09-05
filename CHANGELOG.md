@@ -1,3 +1,35 @@
+# [0.1.2](https://github.com/brpaz/lib-go/compare/v0.1.1...v0.1.2) - 2026-09-05
+
+### 🐛 Bug Fixes
+
+- _(deps)_ update module github.com/pressly/goose/v3 to v3.28.0 (#43) [_(00c6f36)_](https://github.com/brpaz/lib-go/commit/00c6f36667666eb292109d1ed1db48ce823b2a1a) (renovate[bot])
+
+- _(deps)_ update testcontainers-go monorepo to v0.44.0 (#30) [_(eb54d0f)_](https://github.com/brpaz/lib-go/commit/eb54d0f2afdcb0365fa66a52976390666ff01587) (renovate[bot])
+
+- _(deps)_ update opentelemetry-go monorepo to v1.46.0 (#41) [_(15a56c2)_](https://github.com/brpaz/lib-go/commit/15a56c22f8bb583aa898fb5998fb1af393460455) (renovate[bot])
+
+- _(deps)_ update module go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp to v0.71.0 (#37) [_(96f05bd)_](https://github.com/brpaz/lib-go/commit/96f05bd820255a72eec68fcda085f669f88fa08d) (renovate[bot])
+
+- _(deps)_ update module github.com/stretchr/testify to v1.12.1 (#40) [_(5d3f663)_](https://github.com/brpaz/lib-go/commit/5d3f6632dbda72cc32b69947c3d73269b4beff72) (renovate[bot])
+
+- _(deps)_ update module github.com/pb33f/libopenapi-validator to v0.14.0 (#28) [_(b9fe9dd)_](https://github.com/brpaz/lib-go/commit/b9fe9dd68ee1087042df6c2734ed95b25ad1725d) (renovate[bot])
+
+- _(deps)_ update module github.com/pb33f/libopenapi to v0.38.7 (#27) [_(fa18eac)_](https://github.com/brpaz/lib-go/commit/fa18eac037ef4c098ba36ba6ebf020375d218b2d) (renovate[bot])
+
+- _(deps)_ update module gorm.io/driver/postgres to v1.6.2 (#36) [_(f078e92)_](https://github.com/brpaz/lib-go/commit/f078e926eec76e0f0a3d62784bdd2c035fee8baf) (renovate[bot])
+
+- _(deps)_ update module github.com/pressly/goose/v3 to v3.27.3 (#33) [_(0ac52b2)_](https://github.com/brpaz/lib-go/commit/0ac52b2530cf92d034979454fb812e857fb46a59) (renovate[bot])
+
+- _(deps)_ update module github.com/lmittmann/tint to v1.2.0 (#34) [_(545e6ab)_](https://github.com/brpaz/lib-go/commit/545e6ab65a58bbafbbcfc35c92d2bada9f398b07) (renovate[bot])
+
+### 🧹 Chore
+
+- _(renovate)_ use :automergeMinor preset for minor/patch automerge [_(9023f86)_](https://github.com/brpaz/lib-go/commit/9023f8602be2af5ee0bda59dc6544f57b70567e5) (Bruno Paz)
+
+- _(deps)_ update github-actions (#39) [_(d6d12c3)_](https://github.com/brpaz/lib-go/commit/d6d12c3e14e786410e152b682b616921fd9467f4) (renovate[bot])
+
+- _(renovate)_ automerge minor/patch, group github-actions, min release age (#38) [_(e64099b)_](https://github.com/brpaz/lib-go/commit/e64099b650e01bce434d71d10ed99c0acc20c93e) (Bruno Paz)
+
 # [0.1.1](https://github.com/brpaz/lib-go/compare/v0.1.0...v0.1.1) - 2026-06-11
 
 ### 🐛 Bug Fixes
