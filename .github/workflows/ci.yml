@@ -26,10 +26,10 @@ jobs:
       db: ${{ steps.exclusive.outputs.db }}
       shared: ${{ steps.filter.outputs.shared }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       # Plain "any pattern matches" filters (default predicate-quantifier: 'some').
-      - uses: dorny/paths-filter@v4
+      - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4
         id: filter
         with:
           filters: |
@@ -41,7 +41,7 @@ jobs:
 
       # base+exclude filters need 'every' so the '!' patterns actually exclude
       # (with the default 'some', the leading '**' alone makes these always true).
-      - uses: dorny/paths-filter@v4
+      - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4
         id: exclusive
         with:
           predicate-quantifier: every
