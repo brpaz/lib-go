@@ -15,7 +15,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Publish Release
-        uses: robgonnella/releasaurus/action@v1.2.0
+        uses: robgonnella/releasaurus/action@a355c65c920c64ff8f922462cc55cf81b1b1af81 # v1.2.0
         with:
           command: release
           command_args: >-
@@ -25,7 +25,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release PR
-        uses: robgonnella/releasaurus/action@v1.2.0
+        uses: robgonnella/releasaurus/action@a355c65c920c64ff8f922462cc55cf81b1b1af81 # v1.2.0
         with:
           command: release-pr
           command_args: >-
