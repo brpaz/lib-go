@@ -5,7 +5,7 @@ go 1.26.2
 require (
 	github.com/google/uuid v1.6.0
 	github.com/lmittmann/tint v1.2.0
-	github.com/pb33f/libopenapi v0.39.1
+	github.com/pb33f/libopenapi v0.40.1
 	github.com/pb33f/libopenapi-validator v0.14.0
 	github.com/stretchr/testify v1.12.1
 	go.opentelemetry.io/otel/trace v1.46.0
