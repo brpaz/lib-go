@@ -37,6 +37,8 @@ github.com/lmittmann/tint v1.2.0 h1:AogHRHy8HUJUnNJBHJlYa+fR4YY8mko2cnCp67xn9JY=
 github.com/lmittmann/tint v1.2.0/go.mod h1:HIS3gSy7qNwGCj+5oRjAutErFBl4BzdQP6cJZ0NfMwE=
 github.com/pb33f/go-yaml v0.1.0 h1:zZ6Gg+ATbumXlXZNLMHIe7+zTkVqe20lx+TSYRrXEuY=
 github.com/pb33f/go-yaml v0.1.0/go.mod h1:QvWdkHP5VjFYAeHMQUkaPQqREaQnBNOXmWzAjNrnSdo=
+github.com/pb33f/go-yaml v0.1.1 h1:yWGmhVdwzionRnSc/hEJwcfq6PaZL2QdYzyReXBbX7Q=
+github.com/pb33f/go-yaml v0.1.1/go.mod h1:QvWdkHP5VjFYAeHMQUkaPQqREaQnBNOXmWzAjNrnSdo=
 github.com/pb33f/jsonpath v0.8.2 h1:Ou4C7zjYClBm97dfZjDCjdZGusJoynv/vrtiEKNfj2Y=
 github.com/pb33f/jsonpath v0.8.2/go.mod h1:zBV5LJW4OQOPatmQE2QdKpGQJvhDTlE5IEj6ASaRNTo=
 github.com/pb33f/jsonpath v0.8.3 h1:gdOUYn31vic8iRSSR4I2SEv7UQf2WxLeDcUnDPpGZNE=
@@ -55,6 +57,8 @@ github.com/pb33f/libopenapi v0.40.1 h1:Ma+2kxag5ox70sSP4dcgGY/4QGZ0VS5Ov8S/z4POy
 github.com/pb33f/libopenapi v0.40.1/go.mod h1:nISN8KLZBliHRwZY0V53JZJtuzI8P52WGfJ6J56z9Tg=
 github.com/pb33f/libopenapi v0.41.1 h1:k2TzRNoFWdwtgZK8LpmqIHIPxD/6nExHkmB7QZXBets=
 github.com/pb33f/libopenapi v0.41.1/go.mod h1:okMH18Y4oyUXUSCr84u+hHe7t/gWDwoHv/f3CEls4SQ=
+github.com/pb33f/libopenapi v0.41.2 h1:7/KNzJJ0o5fC/tYxDYcHjziKfg0bkBpFUfI2UDbChAo=
+github.com/pb33f/libopenapi v0.41.2/go.mod h1:mUldESjO6ownR1TCcywvoYp7e4v/bCdQyiiIqsgWne0=
 github.com/pb33f/libopenapi-validator v0.13.7 h1:9rMZjvoG9Qp9u2pr//EKl0cM+Qiwve5pY3Os0qoRC0M=
 github.com/pb33f/libopenapi-validator v0.13.7/go.mod h1:zkbQL07GQANm5UNSvm7Lk5ofDL9GnD4TyCnzHus5lZI=
 github.com/pb33f/libopenapi-validator v0.13.8 h1:3t/5hUq8EYIWe6Uwj5RA7xFSWkleDbqsueA78/tIAo8=
