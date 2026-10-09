@@ -5,8 +5,8 @@ go 1.26.2
 require (
 	github.com/google/uuid v1.6.0
 	github.com/lmittmann/tint v1.2.0
-	github.com/pb33f/libopenapi v0.41.2
-	github.com/pb33f/libopenapi-validator v0.15.0
+	github.com/pb33f/libopenapi v0.41.3
+	github.com/pb33f/libopenapi-validator v0.15.2
 	github.com/stretchr/testify v1.12.1
 	go.opentelemetry.io/otel/trace v1.46.0
 )
@@ -17,10 +17,11 @@ require (
 	github.com/buger/jsonparser v1.1.2 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/go-openapi/jsonpointer v0.23.2 // indirect
+	github.com/go-openapi/jsonpointer v1.0.2 // indirect
 	github.com/go-openapi/swag/jsonname v0.26.1 // indirect
 	github.com/pb33f/go-yaml v0.1.1 // indirect
 	github.com/pb33f/jsonpath v0.8.4 // indirect
+	github.com/pb33f/jsonschema/v6 v6.0.3 // indirect
 	github.com/pb33f/ordered-map/v2 v2.3.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.2 // indirect
@@ -29,6 +30,6 @@ require (
 	go.yaml.in/yaml/v4 v4.0.0-rc.6 // indirect
 	golang.org/x/net v0.56.0 // indirect
 	golang.org/x/sync v0.23.0 // indirect
-	golang.org/x/text v0.39.0 // indirect
+	golang.org/x/text v0.42.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
