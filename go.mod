@@ -6,7 +6,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/lmittmann/tint v1.2.1
 	github.com/pb33f/libopenapi v0.41.5
-	github.com/pb33f/libopenapi-validator v0.15.2
+	github.com/pb33f/libopenapi-validator v0.16.1
 	github.com/stretchr/testify v1.12.1
 	go.opentelemetry.io/otel/trace v1.47.0
 )
