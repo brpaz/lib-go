@@ -71,6 +71,8 @@ github.com/pb33f/libopenapi v0.41.5 h1:kwEFkd/6W3tmTfsWQCVsMa0a9b1x3HYIZvt9Ek4jI
 github.com/pb33f/libopenapi v0.41.5/go.mod h1:mUldESjO6ownR1TCcywvoYp7e4v/bCdQyiiIqsgWne0=
 github.com/pb33f/libopenapi v0.41.6 h1:W1X/5rOaAk3/Mjwrt+DHaiJO6buhruKWrbQ+pumONkA=
 github.com/pb33f/libopenapi v0.41.6/go.mod h1:mUldESjO6ownR1TCcywvoYp7e4v/bCdQyiiIqsgWne0=
+github.com/pb33f/libopenapi v0.41.8 h1:SCqrRbHNodEJjyLRFhvUkLyjQ1H+1W0fxhR+oCslRis=
+github.com/pb33f/libopenapi v0.41.8/go.mod h1:IlfeXtmcY38KEnGJ4OMWFA8I62BCNamuQa8omLnk6R0=
 github.com/pb33f/libopenapi-validator v0.13.7 h1:9rMZjvoG9Qp9u2pr//EKl0cM+Qiwve5pY3Os0qoRC0M=
 github.com/pb33f/libopenapi-validator v0.13.7/go.mod h1:zkbQL07GQANm5UNSvm7Lk5ofDL9GnD4TyCnzHus5lZI=
 github.com/pb33f/libopenapi-validator v0.13.8 h1:3t/5hUq8EYIWe6Uwj5RA7xFSWkleDbqsueA78/tIAo8=
@@ -144,6 +146,8 @@ golang.org/x/sync v0.22.0 h1:SZjpbeLmrCk4xhRSZFNZW5gFUeCeFgjekvI/+gfScek=
 golang.org/x/sync v0.22.0/go.mod h1:9xrNwdLfx4jkKbNva9FpL6vEN7evnE43NNNJQ2LF3+0=
 golang.org/x/sync v0.23.0 h1:KameEIfc1IkluZyXWLn39Wd4tURc6GbCiISGiZm2bQk=
 golang.org/x/sync v0.23.0/go.mod h1:sUUOizhqBxiL6pEWpqNLUiaJn1ShEbZ6BBqskPbjZm0=
+golang.org/x/sync v0.24.0 h1:iqiDrGoDgyuvAKrhLQthUEzU/R378N78gXbBjxed7oA=
+golang.org/x/sync v0.24.0/go.mod h1:sUUOizhqBxiL6pEWpqNLUiaJn1ShEbZ6BBqskPbjZm0=
 golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20201119102817-f84b799fce68/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=

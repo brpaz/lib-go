@@ -5,7 +5,7 @@ go 1.26.2
 require (
 	github.com/google/uuid v1.6.0
 	github.com/lmittmann/tint v1.2.1
-	github.com/pb33f/libopenapi v0.41.6
+	github.com/pb33f/libopenapi v0.41.8
 	github.com/pb33f/libopenapi-validator v0.16.1
 	github.com/stretchr/testify v1.12.1
 	go.opentelemetry.io/otel/trace v1.47.0
@@ -29,7 +29,7 @@ require (
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	go.yaml.in/yaml/v4 v4.0.0-rc.6 // indirect
 	golang.org/x/net v0.60.0 // indirect
-	golang.org/x/sync v0.23.0 // indirect
+	golang.org/x/sync v0.24.0 // indirect
 	golang.org/x/text v0.42.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
