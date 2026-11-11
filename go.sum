@@ -49,6 +49,8 @@ github.com/pb33f/jsonpath v0.8.3 h1:gdOUYn31vic8iRSSR4I2SEv7UQf2WxLeDcUnDPpGZNE=
 github.com/pb33f/jsonpath v0.8.3/go.mod h1:zBV5LJW4OQOPatmQE2QdKpGQJvhDTlE5IEj6ASaRNTo=
 github.com/pb33f/jsonpath v0.8.4 h1:Yx7fxsKl8scgERL22WhKDs2c6gYNNUonPSWEG8Y194s=
 github.com/pb33f/jsonpath v0.8.4/go.mod h1:eO6mgdhw5RgzCxm/bXTi75VUs0/cCYJzdGjMCCUEI6M=
+github.com/pb33f/jsonpath v0.8.5 h1:wsbwJbz6MPUTy5fAtiIlOyQb3oblaa5M7qjtdz6orPw=
+github.com/pb33f/jsonpath v0.8.5/go.mod h1:eO6mgdhw5RgzCxm/bXTi75VUs0/cCYJzdGjMCCUEI6M=
 github.com/pb33f/jsonschema/v6 v6.0.3 h1:TMIkE1xCmnF8Cy+anIBs+r4ASfGtwzfFxYsrrIn0wSU=
 github.com/pb33f/jsonschema/v6 v6.0.3/go.mod h1:cYPShw+w1Jrs0YgpE2rk1FLdIAsKfWcotv/54G6ddFo=
 github.com/pb33f/libopenapi v0.36.6 h1:DRqWcgnMn8wiknMBKETIRZiY+GL05xEFtWwnK/Q+WOs=
@@ -73,6 +75,8 @@ github.com/pb33f/libopenapi v0.41.6 h1:W1X/5rOaAk3/Mjwrt+DHaiJO6buhruKWrbQ+pumON
 github.com/pb33f/libopenapi v0.41.6/go.mod h1:mUldESjO6ownR1TCcywvoYp7e4v/bCdQyiiIqsgWne0=
 github.com/pb33f/libopenapi v0.41.8 h1:SCqrRbHNodEJjyLRFhvUkLyjQ1H+1W0fxhR+oCslRis=
 github.com/pb33f/libopenapi v0.41.8/go.mod h1:IlfeXtmcY38KEnGJ4OMWFA8I62BCNamuQa8omLnk6R0=
+github.com/pb33f/libopenapi v0.42.4 h1:PUEDCi0JMZFC1G+Yxej7d5OQEDLcszgRrSC4j8kzYIU=
+github.com/pb33f/libopenapi v0.42.4/go.mod h1:ap6qfNXmQ55iuXzef+k/3o/1zJOoSLCvL2snqDghVHw=
 github.com/pb33f/libopenapi-validator v0.13.7 h1:9rMZjvoG9Qp9u2pr//EKl0cM+Qiwve5pY3Os0qoRC0M=
 github.com/pb33f/libopenapi-validator v0.13.7/go.mod h1:zkbQL07GQANm5UNSvm7Lk5ofDL9GnD4TyCnzHus5lZI=
 github.com/pb33f/libopenapi-validator v0.13.8 h1:3t/5hUq8EYIWe6Uwj5RA7xFSWkleDbqsueA78/tIAo8=
